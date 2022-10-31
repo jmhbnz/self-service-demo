@@ -4,7 +4,8 @@
 
 # AWS Provider
 terraform {
-  backend "http"
+  backend "http" {
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
