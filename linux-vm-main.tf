@@ -4,7 +4,7 @@
 
 # Create Elastic IP for the EC2 instance
 resource "aws_eip" "linux-eip" {
-  vpc  = true
+  vpc = true
   tags = {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-eip"
     Environment = var.app_environment
@@ -21,7 +21,7 @@ resource "aws_instance" "linux-server" {
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name
   user_data                   = file("aws-user-data.sh")
-  
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -38,7 +38,7 @@ resource "aws_instance" "linux-server" {
     encrypted             = true
     delete_on_termination = true
   }
-  
+
   tags = {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-server"
     Environment = var.app_environment
