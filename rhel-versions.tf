@@ -3,7 +3,7 @@
 ######################################
 
 # RHEL 9.0
-data "aws_ami" "rhel_8_6" {
+data "aws_ami" "rhel_9_0" {
   most_recent = true
 
   owners = ["309956199498"] // Red Hat's Account ID
