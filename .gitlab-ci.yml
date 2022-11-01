@@ -16,19 +16,19 @@ stages:
 fmt:
   extends: .terraform:fmt
   needs: []
-  environment:
-    TF_ROOT: 2-vm-cloud-migration
+  variables:
+    TF_ROOT: "2-vm-cloud-migration"
 
 validate:
   extends: .terraform:validate
   needs: []
-  environment:
-    TF_ROOT: 2-vm-cloud-migration
+  variables:
+    TF_ROOT: "2-vm-cloud-migration"
 
 build:
   extends: .terraform:build
-  environment:
-    TF_ROOT: 2-vm-cloud-migration
+  variables:
+    TF_ROOT: "2-vm-cloud-migration"
 
 deploy:
   extends: .terraform:deploy
@@ -36,4 +36,5 @@ deploy:
     - build
   environment:
     name: $TF_STATE_NAME
-    TF_ROOT: 2-vm-cloud-migration
+  variables:
+    TF_ROOT: "2-vm-cloud-migration"
