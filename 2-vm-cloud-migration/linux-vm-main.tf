@@ -4,6 +4,7 @@
 
 # Create Elastic IP for the EC2 instance
 resource "aws_eip" "linux-eip" {
+  count = 8
   vpc = true
   tags = {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-eip"
@@ -50,7 +51,7 @@ resource "aws_instance" "linux-server" {
 resource "aws_eip_association" "linux-eip-association" {
   count         = 8
   instance_id   = aws_instance.linux-server[count.index].id
-  allocation_id = aws_eip.linux-eip.id
+  allocation_id = aws_eip.linux-eip[count.index].id
 }
 
 # Define the security group for the Linux server
