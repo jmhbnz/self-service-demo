@@ -5,7 +5,7 @@
 # Create Elastic IP for the EC2 instance
 resource "aws_eip" "linux-eip" {
   count = 8
-  vpc = true
+  vpc   = true
   tags = {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-eip"
     Environment = var.app_environment
