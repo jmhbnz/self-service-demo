@@ -35,6 +35,11 @@ deploy:
   dependencies:
     - build
   environment:
-    name: $TF_STATE_NAME
+    name: development
+  variables:
+    TF_ROOT: "2-vm-cloud-migration"
+
+destroy:
+  extends: .terraform:destroy
   variables:
     TF_ROOT: "2-vm-cloud-migration"
