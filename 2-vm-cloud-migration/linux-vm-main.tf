@@ -48,7 +48,8 @@ resource "aws_instance" "linux-server" {
 
 # Associate Elastic IP to Linux Server
 resource "aws_eip_association" "linux-eip-association" {
-  instance_id   = aws_instance.linux-server.id
+  count         = 8
+  instance_id   = aws_instance.linux-server[count.index].id
   allocation_id = aws_eip.linux-eip.id
 }
 
