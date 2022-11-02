@@ -12,7 +12,7 @@ resource "aws_eip" "linux-eip" {
 }
 
 # Create EC2 Instance
-resource "aws_instance" "linux-server" "count" {
+resource "aws_instance" "linux-server" {
   count                       = 8
   ami                         = data.aws_ami.rhel_8_6.id
   instance_type               = var.linux_instance_type
