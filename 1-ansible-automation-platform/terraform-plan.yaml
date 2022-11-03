@@ -1,0 +1,20 @@
+ - name: "Execute terraform plan"
+   hosts: localhost
+   connection: local
+
+   tasks:
+
+     - name: "Define the backend configuration at init"
+       community.general.terraform:
+         project_path: "../2-vm-cloud-migration/"
+         state: "planned"
+         force_init: true
+         plan_file: "testing"
+         variables:
+           aws_access_key: "{{ aws_access_key }}"
+           aws_secret_key: "{{ aws_secret_key }}"
+       register: plan
+
+     - name: "Output terraform plan"
+       debug:
+         msg: "{{ plan }}"

@@ -1,0 +1,16 @@
+#+TITLE: Deploy and configure ansible automation platform
+#+DATE: 2nd November 2022
+#+AUTHOR: James Blair <jablair@redhat.com>
+
+This guide will cover deploying
+
+* Setup az cli
+
+Ansible Automation Platform on Azure uses Azure features that require enablement. Run the following command from the Azure CLI or Cloud Console to enable those features. This action only needs to be performed one time for each Azure subscription that you use to install Ansible Automation Platform on Azure.
+
+az feature register --name EnablePodIdentityPreview --namespace Microsoft.ContainerService
+
+
+* Deploy
+
+az resource create --resource-type 'Microsoft.SaaS/resources' -g 'RG_NAME' --properties '{"offerId":"cloudamqp-v3","paymentChannelMetadata":{"azureSubscriptionId":"<SUBSCRIPTION_ID>"},"paymentChannelType":"SubscriptionDelegated","publisherId":"84codes","saasResourceName":"<SAAS_NAME>","skuId":"bunny-1","status":"Subscribed","storeFront":"AzurePortal","termId":"hjdtn7tfnxcy"}' --name <SAAS_NAME> --location global
