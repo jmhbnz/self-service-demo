@@ -42,7 +42,5 @@ deploy:
 
 destroy:
   extends: .terraform:destroy
-  dependencies:
-    - deploy
   variables:
     TF_ROOT: "2-vm-cloud-migration"
