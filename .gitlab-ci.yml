@@ -33,8 +33,6 @@ build:
 
 deploy:
   extends: .terraform:deploy
-  dependencies:
-    - build
   environment:
     name: development
   variables:
