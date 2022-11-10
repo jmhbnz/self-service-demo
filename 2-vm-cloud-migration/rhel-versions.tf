@@ -29,15 +29,15 @@ data "aws_ami" "rhel_9_0" {
   }
 }
 
-# RHEL 8.6
-data "aws_ami" "rhel_8_6" {
+# RHEL 8.7
+data "aws_ami" "rhel_8_7" {
   most_recent = true
 
   owners = ["309956199498"] // Red Hat's Account ID
 
   filter {
     name   = "name"
-    values = ["RHEL-8.6*"]
+    values = ["RHEL-8.7*"]
   }
 
   filter {
