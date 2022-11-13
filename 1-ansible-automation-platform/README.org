@@ -1,16 +1,162 @@
 #+TITLE: Deploy and configure ansible automation platform
-#+DATE: 2nd November 2022
 #+AUTHOR: James Blair <jablair@redhat.com>
+#+DATE: 14th November 2022
 
-This guide will cover deploying
+This guide will cover deploying and configuring [[https://www.ansible.com/products/automation-platform][Ansible Automation Platform]] on top of [[https://aws.amazon.com/rosa/][AWS ROSA]] (Red Hat OpenShift on AWS). The intent of this guide is to make it easy to demonstrate the self service capabilities of Ansible Automation Platform.
 
-* Setup az cli
+* Login to rosa
 
-Ansible Automation Platform on Azure uses Azure features that require enablement. Run the following command from the Azure CLI or Cloud Console to enable those features. This action only needs to be performed one time for each Azure subscription that you use to install Ansible Automation Platform on Azure.
+Our first step to begin the deployment process is to ensure we are logged into the rosa cluster with our local ~oc~ cli. Run the commands below to login, substituting your openshift api server address and token as appropriate:
 
-az feature register --name EnablePodIdentityPreview --namespace Microsoft.ContainerService
+#+NAME: Login to openshift
+#+begin_src tmate
+oc login --server=https://api.rosa-5xmg9.ljce.p1.openshiftapps.com:6443 --token=<insert token here>
+#+end_src
 
 
-* Deploy
+* Deploy ansible automation platform operator
 
-az resource create --resource-type 'Microsoft.SaaS/resources' -g 'RG_NAME' --properties '{"offerId":"cloudamqp-v3","paymentChannelMetadata":{"azureSubscriptionId":"<SUBSCRIPTION_ID>"},"paymentChannelType":"SubscriptionDelegated","publisherId":"84codes","saasResourceName":"<SAAS_NAME>","skuId":"bunny-1","status":"Subscribed","storeFront":"AzurePortal","termId":"hjdtn7tfnxcy"}' --name <SAAS_NAME> --location global
+Our first step for deploying aap is to the ansible automation platform [[https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.1/html/red_hat_ansible_automation_platform_operator_installation_guide/assembly-install-aap-operator][operator]]. The operator will do the heavy lifting for us to make deploying ansible automation platform easy. We can create a new kubernetes ~namespace~ called ~ansible-automation-platform~ and subscribe by running the following:
+
+#+NAME: Deploy aap operator
+#+begin_src tmate
+# Create namespace for aap
+oc new-project ansible-automation-platform
+
+# Create the operator subscription yaml
+cat << EOF > aap-operator.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: ansible-automation-platform-operator
+  namespace: ansible-automation-platform
+spec:
+  channel: stable-2.2
+  installPlanApproval: Automatic
+  name: ansible-automation-platform-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+EOF
+
+# Apply the operator subscription yaml
+oc apply --filename aap-operator.yaml
+#+end_src
+
+
+* Deploy ansible automation controller
+
+Once the ansible automation platform operator is running we can create an instance of [[https://www.ansible.com/products/controller][ansible automation controller]] using the [[https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/][custom resource definition]] that our newly deployed operator is watching for.
+
+The control plane for Ansible Automation Platform is the automation controller (replacing Ansible Tower). It includes a user interface (UI),  role-based access control (RBAC), workflows, and continuous integration and continuous delivery (CI/CD) for helping your team scale with more efficiency and flexibility.
+
+Run the commands below to create and apply the custom resource:
+
+#+NAME: Deploy automation controller custom resource
+#+begin_src tmate
+# Create the custom resource yaml
+cat << EOF > aap-controller.yaml
+apiVersion: automationcontroller.ansible.com/v1beta1
+kind: AutomationController
+metadata:
+  name: aap-demo
+  namespace: ansible-automation-platform
+spec:
+  create_preload_data: true
+  route_tls_termination_mechanism: Edge
+  garbage_collect_secrets: false
+  ingress_type: Route
+  loadbalancer_port: 80
+  image_pull_policy: IfNotPresent
+  projects_storage_size: 8Gi
+  task_privileged: false
+  projects_storage_access_mode: ReadWriteMany
+  projects_persistence: false
+  replicas: 1
+  admin_user: admin
+  loadbalancer_protocol: http
+  nodeport_port: 30080
+EOF
+
+# Apply the resource
+oc apply --filename aap-controller.yaml
+#+end_src
+
+
+* Deploy ansible automation hub
+
+A second key component of the ansible automation platform is the [[https://www.ansible.com/products/automation-hub][ansible automation hub]]. This is the central repository where we can discover and download Ansible Content Collections to automate new projects faster.
+
+Just like automation controller we can create an instance of automation hub using the [[https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/][custom resource definition]] that our newly deployed operator is watching for.
+
+#+NAME: Deploy automation hub custom resource
+#+begin_src tmate
+# Create custom resource yaml
+cat << EOF > aap-hub.yaml
+apiVersion: automationhub.ansible.com/v1beta1
+kind: AutomationHub
+metadata:
+  name: aap-demo-hub
+  namespace: ansible-automation-platform
+spec:
+  nginx_proxy_send_timeout: 120s
+  gunicorn_content_workers: 2
+  gunicorn_api_workers: 2
+  route_tls_termination_mechanism: Edge
+  ingress_type: Route
+  loadbalancer_port: 80
+  no_log: true
+  file_storage_size: 10Gi
+  image_pull_policy: IfNotPresent
+  nginx_proxy_read_timeout: 120s
+  gunicorn_timeout: 90
+  nginx_client_max_body_size: 10m
+  web:
+    replicas: 1
+  nginx_proxy_connect_timeout: 120s
+  haproxy_timeout: 180s
+  file_storage_access_mode: ReadWriteOnce
+  content:
+    log_level: INFO
+    replicas: 1
+  postgres_storage_requirements:
+    limits:
+      storage: 50Gi
+    requests:
+      storage: 8Gi
+  api:
+    log_level: INFO
+    replicas: 1
+  postgres_resource_requirements:
+    limits:
+      cpu: 1000m
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 2Gi
+  redis:
+    log_level: INFO
+    replicas: 1
+  loadbalancer_protocol: http
+  resource_manager:
+    replicas: 1
+  worker:
+    replicas: 1
+  storage_type: File
+  file_storage_storage_class: gp3
+EOF
+
+# Apply the resource
+oc apply --filename aap-hub.yaml
+#+end_src
+
+
+* Deploy ansible automation catalog
+
+The third component of our ansible automation platform demo deployment is the [[https://www.ansible.com/products/automation-services-catalog][ansible automation services catalog]]. This enables self-service automation for business users and developers, freeing up IT teams from manual, repetitive requests for systems access and other resources.
+
+Unfortunately our ansible automation platform operator does not yet support deploying the automation services catalog so we need to
+
+#+NAME: Deploy automation service
+#+begin_src tmate
+
+#+end_src

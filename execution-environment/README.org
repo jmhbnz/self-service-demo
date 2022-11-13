@@ -1,6 +1,6 @@
 #+TITLE: Build custom ansible execution environment
-#+DATE: 4th November 2022
 #+AUTHOR: James Blair <jablair@redhat.com>
+#+DATE: 4th November 2022
 
 Automation execution environments dramatically simplify how automation is executed and managed. An automation execution environment is a container image used to execute Ansible playbooks and roles. It provides a defined, consistent, portable environment for executing automation.
 

@@ -43,7 +43,7 @@ Once the keycloak operator is running we can create an instance of keycloak usin
 
 Note: Substitute your openshift hostname into the template below as appropriate.
 
-#+NAME: Deploy keycloak operator
+#+NAME: Deploy keycloak custom resource
 #+begin_src tmate
 # Create the custom resource yaml
 cat << EOF > keycloak.yaml
