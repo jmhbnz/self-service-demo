@@ -1,0 +1,3 @@
+[submodule "pinakes"]
+	path = pinakes
+	url = https://github.com/ansible/pinakes.git
