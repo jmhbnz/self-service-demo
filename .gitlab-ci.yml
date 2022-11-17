@@ -11,34 +11,27 @@ stages:
   - validate
   - test
   - build
-  - deploy
-  - cleanup
+#  - deploy
+#  - cleanup
+
+before_script:
+  - export TF_ROOT="0-deploy-demo-infra"
 
 fmt:
   extends: .terraform:fmt
   needs: []
-  variables:
-    TF_ROOT: "2-vm-cloud-migration"
 
 validate:
   extends: .terraform:validate
   needs: []
-  variables:
-    TF_ROOT: "2-vm-cloud-migration"
 
 build:
   extends: .terraform:build
-  variables:
-    TF_ROOT: "2-vm-cloud-migration"
 
-deploy:
-  extends: .terraform:deploy
-  environment:
-    name: development
-  variables:
-    TF_ROOT: "2-vm-cloud-migration"
+#deploy:
+#  extends: .terraform:deploy
+#  environment:
+#    name: development
 
-destroy:
-  extends: .terraform:destroy
-  variables:
-    TF_ROOT: "2-vm-cloud-migration"
+#destroy:
+#  extends: .terraform:destroy
