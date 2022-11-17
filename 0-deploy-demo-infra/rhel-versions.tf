@@ -3,14 +3,14 @@
 ######################################
 
 # RHEL 9.0
-data "aws_ami" "rhel_9_1" {
+data "aws_ami" "rhel_9_0" {
   most_recent = true
 
   owners = ["309956199498"] // Red Hat's Account ID
 
   filter {
     name   = "name"
-    values = ["RHEL-9.1*"]
+    values = ["RHEL-9.0*"]
   }
 
   filter {

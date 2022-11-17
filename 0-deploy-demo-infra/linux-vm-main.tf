@@ -4,7 +4,7 @@
 
 # Create Elastic IP for the EC2 instance
 resource "aws_eip" "linux-eip" {
-  count = 8
+  count = 4
   vpc   = true
   tags = {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-eip"
@@ -14,7 +14,7 @@ resource "aws_eip" "linux-eip" {
 
 # Create EC2 Instance
 resource "aws_instance" "linux-server" {
-  count                       = 8
+  count                       = 4
   ami                         = data.aws_ami.rhel_8_7.id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.public-subnet.id
@@ -49,7 +49,7 @@ resource "aws_instance" "linux-server" {
 
 # Associate Elastic IP to Linux Server
 resource "aws_eip_association" "linux-eip-association" {
-  count         = 8
+  count         = 4
   instance_id   = aws_instance.linux-server[count.index].id
   allocation_id = aws_eip.linux-eip[count.index].id
 }
@@ -71,6 +71,14 @@ resource "aws_security_group" "aws-linux-sg" {
   ingress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow incoming HTTPS connections"
+  }
+
+  ingress {
+    from_port   = 8443
+    to_port     = 8443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow incoming HTTPS connections"
