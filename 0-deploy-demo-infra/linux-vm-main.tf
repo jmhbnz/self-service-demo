@@ -92,6 +92,14 @@ resource "aws_security_group" "aws-linux-sg" {
     description = "Allow incoming SSH connections"
   }
 
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    self        = "true"
+    description = "Allow internal postgres connections"
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

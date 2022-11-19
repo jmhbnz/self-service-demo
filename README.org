@@ -1,0 +1,7 @@
+#+TITLE: Enterprise self service demo
+#+AUTHOR: James Blair <jablair@redhat.com>
+#+DATE: 19th November 2022
+
+This repository is a work in progress. The intent in future is that the content of this repository will be used to automatically assemble environments that will be used to demonstrate enterprise self-service capabilities primarily based on Red Hat [[https://www.redhat.com/en/technologies/cloud-computing/openshift][OpenShift]] and Red Hat [[https://www.ansible.com/products/automation-platform][Ansible Automation Platform]].
+
+The repository will be structured with sequentially numbered directories that can be followed in order to create environments and carry out the demo flow.
