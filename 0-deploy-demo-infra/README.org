@@ -1,0 +1,10 @@
+#+TITLE: Deploying demo infrastructure
+#+AUTHOR: James Blair <jablair@redhat.com>
+#+DATE: 21st November 2022
+
+This guide will outline the steps to follow to deploy the infrastructure required to run demonstrations. Infrastructure provisioning is performed via [[https://www.terraform.io/][terraform]].
+
+#+NAME: Initialise terraform
+#+begin_src tmate
+terraform init
+#+end_src
