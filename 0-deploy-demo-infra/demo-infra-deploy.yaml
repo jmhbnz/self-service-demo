@@ -1,0 +1,23 @@
+- name: Deploy demo infrastructure
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+    #- name: Initialise terraform and create plan
+    #  cloud.terraform.terraform:
+    #    project_path: "{{ playbook_dir }}"
+    #    state: planned
+    #    plan_file: terraform.tfstate
+    #    force_init: true
+    #  register: state
+
+    #- name: Output plan
+    #  debug:
+    #    var: state
+
+    - name: Apply plan
+      cloud.terraform.terraform:
+        project_path: "{{ playbook_dir }}"
+        state: present
+        force_init: true
