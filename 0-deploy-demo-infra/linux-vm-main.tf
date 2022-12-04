@@ -45,6 +45,23 @@ resource "aws_instance" "linux-server" {
     Name        = "${lower(var.app_name)}-${var.app_environment}-linux-server"
     Environment = var.app_environment
   }
+
+  # Ensure the machine has started with a remote exec
+  provisioner "remote-exec" {
+    inline = ["echo hello world"]
+
+    connection {
+      host        = "${self.public_ip}"
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = "${file(format("%s.%s",self.key_name,"pem"))}"
+    }
+  }
+
+  # Run ansible playbook post create
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user -i '${self.public_ip},' --private-key '${self.key_name}.pem' demo-infra-configure.yaml"
+  }
 }
 
 # Associate Elastic IP to Linux Server
