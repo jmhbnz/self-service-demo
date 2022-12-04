@@ -1,0 +1,25 @@
+- name: Configure demo infra
+  hosts: all
+
+  tasks:
+
+    - name: Register machine via subscription manager
+      community.general.redhat_subscription:
+        state: present
+        username: rh-ee-jablair
+        password: "{{ lookup('env', 'TF_VAR_subscription_pw' }}"
+        auto_attach: true
+
+    - name: Ensure manage repos set correctly
+      ansible.builtin.shell: |
+        sudo sed -i 's/manage_repos = 0/manage_repos = 1/g' /etc/rhsm/rhsm.conf
+
+
+    - name: Install required packages
+      ansible.builtin.yum:
+        name: python39-pip
+        state: latest
+
+    - name: Install ansible via pip
+      ansible.builtin.pip:
+        name: ansible
