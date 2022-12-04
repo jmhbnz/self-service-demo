@@ -1,5 +1,8 @@
 #! /bin/bash
 sudo yum update -y
-#sudo yum install -y httpd
-#sudo systemctl start httpd
-#sudo systemctl enable httpd
+
+# Ensure root user is able to login
+# This is a pre-requisite for ansible automation platform installer
+existing=$(sudo cat /root/.ssh/authorized_keys)
+new=${existing:165}
+sudo echo $new > /root/.ssh/authorized_keys
