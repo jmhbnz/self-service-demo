@@ -19,6 +19,7 @@ export TF_VAR_gitlab_token=<changeme>
 
 # Install certified terraform collection
 ansible-galaxy collection install cloud.terraform
+ansible-galaxy collection install awx.awx
 
 # Run the deploy playbook
 ansible-playbook -i localhost demo-infra-deploy.yaml
