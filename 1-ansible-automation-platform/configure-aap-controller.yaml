@@ -1,0 +1,32 @@
+---
+- name: Configure automation controller
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - awx.awx
+
+  tasks:
+
+  - name: "Create gitlab source control credential"
+    credential:
+      name: "Gitlab"
+      organization: "Default"
+      state: "present"
+      credential_type: "Source Control"
+      inputs:
+        username: "read_only_public_repo"
+        password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+      controller_config_file: "controller.cfg"
+      validate_certs: false
+
+  - name: "Add project to infra creation"
+    project:
+      name: "Cloud adoption"
+      description: "Cloud adoption automation."
+      organization: "Default"
+      state: "present"
+      scm_type: "git"
+      scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
+      controller_config_file: "controller.cfg"
+      validate_certs: false
