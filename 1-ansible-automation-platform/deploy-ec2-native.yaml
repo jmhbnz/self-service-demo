@@ -1,0 +1,16 @@
+---
+- name: Create an rhel ec2 instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    region: ap-southeast-2
+    instance_type: t2.micro
+    image_id: ami-0b4ee18dc73d90a7b
+  tasks:
+    - name: Create the EC2 instance
+      aws_ec2:
+        region: "{{ region }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ image_id }}"
+        wait: yes
