@@ -1,5 +1,7 @@
 - name: Configure demo infra
   hosts: all
+  vars:
+    ansible_host_key_checking: false
 
   tasks:
 
@@ -50,6 +52,7 @@
       copy:
         src: rhel-demo-dev-linux-ap-southeast-2.pem
         dest: /home/ec2-user/rhel-demo-dev-linux-ap-southeast-2.pem
+        mode: 0400
 
     - name: Copy inventory file to server
       copy:
