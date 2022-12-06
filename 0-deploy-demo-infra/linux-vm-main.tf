@@ -54,7 +54,7 @@ resource "aws_instance" "linux-server" {
       host        = self.public_ip
       type        = "ssh"
       user        = "ec2-user"
-      private_key = file(format("%s.%s",self.key_name,"pem"))
+      private_key = file(format("%s.%s", self.key_name,"pem"))
     }
   }
 
