@@ -44,8 +44,14 @@
       loop:
         - "[defaults]"
         - "private_key_file = /home/ec2-user/rhel-demo-dev-linux-ap-southeast-2.pem"
+        - "host_key_checking = False"
 
-    - name: Copy file to server
+    - name: Copy key file to server
       copy:
         src: rhel-demo-dev-linux-ap-southeast-2.pem
         dest: /home/ec2-user/rhel-demo-dev-linux-ap-southeast-2.pem
+
+    - name: Copy inventory file to server
+      copy:
+        src: inventory
+        dest: /home/ec2-user/ansible-automation-platform-setup-2.3-1/inventory
