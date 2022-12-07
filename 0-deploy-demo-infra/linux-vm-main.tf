@@ -157,12 +157,18 @@ resource "cloudflare_record" "cloudflare-catalog" {
   value   = aws_instance.linux-server[3].public_ip
 }
 
+resource "cloudflare_record" "cloudflare-database" {
+  zone_id = var.cloudflare_zone_id
+  name    = "database.rhdemo.win"
+  type    = "A"
+  value   = aws_instance.linux-server[0].private_ip
+}
 
-#resource "null_resource" "configure-ec2" {
-#  count = 4
-#
-#  # Run ansible playbook post create
-#  provisioner "local-exec" {
-#    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user -i '${aws_instance.linux-server[count.index].public_ip},' --private-key '${aws_instance.linux-server[count.index].key_name}.pem' demo-infra-configure.yaml"
-#  }
-#}
+resource "null_resource" "configure-ec2" {
+  count = 4
+
+  # Run ansible playbook post create
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '${aws_instance.linux-server[count.index].public_ip},' --private-key '${aws_instance.linux-server[count.index].key_name}.pem' demo-infra-configure.yaml"
+  }
+}
