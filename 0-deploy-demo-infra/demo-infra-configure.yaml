@@ -43,6 +43,7 @@
         path: /etc/ansible/ansible.cfg
         line: "{{ item }}"
         state: present
+        create: true
       loop:
         - "[defaults]"
         - "private_key_file = /home/ec2-user/rhel-demo-dev-linux-ap-southeast-2.pem"
