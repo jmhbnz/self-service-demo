@@ -10,7 +10,7 @@
         state: present
         username: rh-ee-jablair
         password: "{{ lookup('env', 'TF_VAR_subscription_pw') }}"
-        auto_attach: true
+        auto_attach: false
 
     - name: Ensure manage repos set correctly
       ansible.builtin.shell: |
