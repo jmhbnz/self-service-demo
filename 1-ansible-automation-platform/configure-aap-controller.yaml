@@ -20,6 +20,20 @@
       controller_config_file: "controller.cfg"
       validate_certs: false
 
+  - name: "Create gitlab container registry credential"
+    credential:
+      name: "Gitlab Registry"
+      organization: "Default"
+      state: "present"
+      credential_type: "Container Registry"
+      inputs:
+        host: "registry.gitlab.com"
+        password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+        username: "jmhbnz"
+        verify_ssl: true
+      controller_config_file: "controller.cfg"
+      validate_certs: false
+
   - name: "Add project to infra creation"
     project:
       name: "Cloud adoption"
