@@ -42,8 +42,12 @@ build:
         - 0-deploy-demo-infra/*
 
 create-vm:
-  script: |
-    curl -X POST -H "Content-Type: application/json" -d '{"extra_vars": {"var1": "value1"}}' -H "Authorization: Bearer <AWX_TOKEN>" <AWX_URL>/api/v2/job_templates/<AWX_JOB_TEMPLATE_ID>/launch/
+  script:
+    - >
+        curl -X POST -k -H "Content-Type: application/json"
+        -d '{"extra_vars": {"region": "$region", "instance_type": "$instance_type", "image_id", "$image_id" }}'
+        -H "Authorization: Bearer $TF_VAR_aap_token"
+        https://controller.rhdemo.win/api/v2/job_templates/9/launch/
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
@@ -58,10 +62,6 @@ create-vm:
     - image_id:
         prompt: "Enter the ec2 machine image id"
         default: "ami-0b4ee18dc73d90a7b"
-    - key_pair:
-        default: "rhel-demo-dev-linux-ap-southeast-2"
-    - subnet_id:
-        default: "subnet-000af6e79d9951160"
 
 deploy:
   extends: .terraform:deploy

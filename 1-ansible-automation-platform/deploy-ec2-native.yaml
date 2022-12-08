@@ -9,8 +9,8 @@
     - name: Create the EC2 instance
       amazon.aws.ec2_instance:
         name: "demo-ec2-instance"
-        key_name: "{{ lookup('env', 'key_pair') }}"
-        vpc_subnet_id: "{{ lookup('env', 'subnet_id') }}"
+        key_name: "{{ lookup('env', 'key_pair') | default('rhel-demo-dev-linux-ap-southeast-2') }}"
+        vpc_subnet_id: "{{ lookup('env', 'subnet_id') | default('subnet-000af6e79d9951160') }}"
         instance_type: "{{ lookup('env', 'instance_type') }}"
         security_group: "default"
         region: "{{ lookup('env', 'region') }}"
