@@ -25,3 +25,5 @@
           assign_public_ip: false
         image_id: "{{ image_id }}"
         wait: yes
+        tags:
+          type: "webserver"
