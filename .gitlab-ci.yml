@@ -25,7 +25,6 @@ fmt:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
         - 0-deploy-demo-infra/*
-      when: manual
 
 validate:
   extends: .terraform:validate
@@ -34,7 +33,6 @@ validate:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
         - 0-deploy-demo-infra/*
-      when: manual
 
 build:
   extends: .terraform:build
@@ -42,7 +40,6 @@ build:
     - if: $CI_PIPELINE_SOURCE == "push"
       changes:
         - 0-deploy-demo-infra/*
-      when: manual
 
 create-vm:
   script: |
