@@ -21,26 +21,33 @@ before_script:
 fmt:
   extends: .terraform:fmt
   needs: []
-  only:
-    changes:
-      - 0-deploy-demo-infra/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - 0-deploy-demo-infra/*
+      when: manual
 
 validate:
   extends: .terraform:validate
   needs: []
-  only:
-    changes:
-      - 0-deploy-demo-infra/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - 0-deploy-demo-infra/*
+      when: manual
 
 build:
   extends: .terraform:build
-  only:
-    changes:
-      - 0-deploy-demo-infra/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - 0-deploy-demo-infra/*
+      when: manual
 
 create-vm:
   script: |
     curl -X POST -H "Content-Type: application/json" -d '{"extra_vars": {"var1": "value1"}}' -H "Authorization: Bearer <AWX_TOKEN>" <AWX_URL>/api/v2/job_templates/<AWX_JOB_TEMPLATE_ID>/launch/
+  allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
       when: manual
@@ -61,6 +68,8 @@ destroy:
   extends: .terraform:destroy
   when: manual
   allow_failure: true
-  only:
-    changes:
-      - 0-deploy-demo-infra/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - 0-deploy-demo-infra/*
+      when: manual
