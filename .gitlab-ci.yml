@@ -15,6 +15,17 @@ stages:
   - deploy
   - cleanup
 
+variables:
+    - region:
+        prompt: "Enter the region for ec2 instance"
+        default: "ap-southeast-2"
+    - instance_type:
+        prompt: "Enter the desired ec2 instance type"
+        default: "t2.micro"
+    - image_id:
+        prompt: "Enter the ec2 machine image id"
+        default: "ami-0b4ee18dc73d90a7b"
+
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
 
@@ -52,16 +63,6 @@ create-vm:
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
       when: manual
-  variables:
-    - region:
-        prompt: "Enter the region for ec2 instance"
-        default: "ap-southeast-2"
-    - instance_type:
-        prompt: "Enter the desired ec2 instance type"
-        default: "t2.micro"
-    - image_id:
-        prompt: "Enter the ec2 machine image id"
-        default: "ami-0b4ee18dc73d90a7b"
 
 deploy:
   extends: .terraform:deploy
