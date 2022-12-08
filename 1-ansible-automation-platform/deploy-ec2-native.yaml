@@ -11,17 +11,17 @@
     key_pair: "rhel-demo-dev-linux-ap-southeast-2"
     subnet_id: "subnet-000af6e79d9951160"
 
-    tasks:
+  tasks:
 
-      - name: Create the EC2 instance
-        amazon.aws.ec2_instance:
-          name: "demo-ec2-instance"
-          key_name: "{{ key_pair }}"
-          vpc_subnet_id: "{{ subnet_id }}"
-          instance_type: "{{ instance_type }}"
-          security_group: "default"
-          region: "{{ region }}"
-          network:
-            assign_public_ip: false
-          image_id: "{{ image_id }}"
-          wait: yes
+    - name: Create the EC2 instance
+      amazon.aws.ec2_instance:
+        name: "demo-ec2-instance"
+        key_name: "{{ key_pair }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        instance_type: "{{ instance_type }}"
+        security_group: "default"
+        region: "{{ region }}"
+        network:
+          assign_public_ip: false
+        image_id: "{{ image_id }}"
+        wait: yes
