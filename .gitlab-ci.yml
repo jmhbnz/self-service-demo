@@ -28,7 +28,6 @@ variables:
 
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
-  - pip3 install awxkit
 
 fmt:
   extends: .terraform:fmt
@@ -54,7 +53,9 @@ build:
         - 0-deploy-demo-infra/*
 
 create-vm:
+  image: registry.access.redhat.com/ubi9/python-39
   script:
+    - pip3 install awxkit
     - >
         curl -v -X POST -k -H "Content-Type: application/json"
         -d '{"extra_vars": {"region": "$region", "instance_type": "$instance_type", "image_id", "$image_id" }}'
