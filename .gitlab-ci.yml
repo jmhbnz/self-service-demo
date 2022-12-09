@@ -16,18 +16,19 @@ stages:
   - cleanup
 
 variables:
-    region:
-      description: "Enter the region for ec2 instance"
-      value: "ap-southeast-2"
-    instance_type:
-      description: "Enter the desired ec2 instance type"
-      value: "t2.micro"
-    image_id:
-      description: "Enter the ec2 machine image id"
-      value: "ami-0b4ee18dc73d90a7b"
+  region:
+    description: "Enter the region for ec2 instance"
+    value: "ap-southeast-2"
+  instance_type:
+    description: "Enter the desired ec2 instance type"
+    value: "t2.micro"
+  image_id:
+    description: "Enter the ec2 machine image id"
+    value: "ami-0b4ee18dc73d90a7b"
 
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
+  - pip3 install awxkit
 
 fmt:
   extends: .terraform:fmt
@@ -55,7 +56,7 @@ build:
 create-vm:
   script:
     - >
-        curl -X POST -k -H "Content-Type: application/json"
+        curl -v -X POST -k -H "Content-Type: application/json"
         -d '{"extra_vars": {"region": "$region", "instance_type": "$instance_type", "image_id", "$image_id" }}'
         -H "Authorization: Bearer $TF_VAR_aap_token"
         https://controller.rhdemo.win/api/v2/job_templates/9/launch/
