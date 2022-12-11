@@ -68,10 +68,10 @@ create-ec2-instance:
   script:
     - pip3 install awxkit
     - >
-        curl -v -X POST -k -H "Content-Type: application/json"
-        -d "{\"extra_vars\": {\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"image_id\": \"$image_id\" }}"
-        -H "Authorization: Bearer $TF_VAR_aap_token"
-        https://controller.rhdemo.win/api/v2/job_templates/9/launch/
+        awx --conf.token "$TF_VAR_aap_token" -k --conf.host https://controller.rhdemo.win
+        job_templates launch "Create ec2 instance"
+        --extra_vars "{\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"image_id\": \"$image_id\" }"
+        --monitor
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
 
