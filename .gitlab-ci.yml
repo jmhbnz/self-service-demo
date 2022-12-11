@@ -22,9 +22,9 @@ variables:
   instance_type:
     description: "Enter the desired ec2 instance type"
     value: "t2.micro"
-  image_id:
-    description: "Enter the ec2 machine image id"
-    value: "ami-0b4ee18dc73d90a7b"
+  rhel_version:
+    description: "Enter the RHEL version"
+    value: "9.1"
 
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
@@ -70,7 +70,7 @@ create-ec2-instance:
     - >
         awx --conf.token "$TF_VAR_aap_token" -k --conf.host https://controller.rhdemo.win
         job_templates launch "Create ec2 instance"
-        --extra_vars "{\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"image_id\": \"$image_id\" }"
+        --extra_vars "{\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"rhel_version\": \"$rhel_version\" }"
         --monitor
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
