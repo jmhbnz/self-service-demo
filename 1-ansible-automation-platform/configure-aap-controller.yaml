@@ -8,72 +8,72 @@
 
   tasks:
 
-  - name: "Create gitlab source control credential"
-    credential:
-      name: "Gitlab"
-      organization: "Default"
-      state: "present"
-      credential_type: "Source Control"
-      inputs:
-        username: "read_only_public_repo"
-        password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Create gitlab source control credential"
+      credential:
+        name: "Gitlab"
+        organization: "Default"
+        state: "present"
+        credential_type: "Source Control"
+        inputs:
+          username: "read_only_public_repo"
+          password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+        controller_config_file: "controller.cfg"
+        validate_certs: false
 
-  - name: "Create gitlab container registry credential"
-    credential:
-      name: "Gitlab Registry"
-      organization: "Default"
-      state: "present"
-      credential_type: "Container Registry"
-      inputs:
-        host: "registry.gitlab.com"
-        password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
-        username: "jmhbnz"
-        verify_ssl: true
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Create gitlab container registry credential"
+      credential:
+        name: "Gitlab Registry"
+        organization: "Default"
+        state: "present"
+        credential_type: "Container Registry"
+        inputs:
+          host: "registry.gitlab.com"
+          password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+          username: "jmhbnz"
+          verify_ssl: true
+        controller_config_file: "controller.cfg"
+        validate_certs: false
 
-  - name: "Add project for infra creation"
-    project:
-      name: "Cloud adoption"
-      description: "Cloud adoption automation."
-      organization: "Default"
-      state: "present"
-      scm_type: "git"
-      scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Add project for infra creation"
+      project:
+        name: "Cloud adoption"
+        description: "Cloud adoption automation."
+        organization: "Default"
+        state: "present"
+        scm_type: "git"
+        scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
+        controller_config_file: "controller.cfg"
+        validate_certs: false
 
-  - name: "Add credential for aws"
-    credential:
-      name: "Amazon Web Services"
-      organization: "Default"
-      state: "present"
-      credential_type: "Amazon Web Services"
-      inputs:
-        password: "{{ lookup('env', 'TF_VAR_aws_secret_key') }}"
-        username: "{{ lookup('env', 'TF_VAR_aws_access_key') }}"
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Add credential for aws"
+      credential:
+        name: "Amazon Web Services"
+        organization: "Default"
+        state: "present"
+        credential_type: "Amazon Web Services"
+        inputs:
+          password: "{{ lookup('env', 'TF_VAR_aws_secret_key') }}"
+          username: "{{ lookup('env', 'TF_VAR_aws_access_key') }}"
+        controller_config_file: "controller.cfg"
+        validate_certs: false
 
-  - name: "Add localhost inventory"
-    inventory:
-      name: "Localhost"
-      organization: "Default"
-      state: "present"
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Add localhost inventory"
+      inventory:
+        name: "Localhost"
+        organization: "Default"
+        state: "present"
+        controller_config_file: "controller.cfg"
+        validate_certs: false
 
-  - name: "Add job template for creating virtual machines."
-    job_template:
-      name: "Create ec2 instance"
-      organization: "Default"
-      state: "present"
-      description: "Job template to create an aws ec2 instance."
-      project: "Cloud adoption"
-      inventory: "Localhost"
-      playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
-      credential: "Amazon Web Services"
-      controller_config_file: "controller.cfg"
-      validate_certs: false
+    - name: "Add job template for creating virtual machines."
+      job_template:
+        name: "Create ec2 instance"
+        organization: "Default"
+        state: "present"
+        description: "Job template to create an aws ec2 instance."
+        project: "Cloud adoption"
+        inventory: "Localhost"
+        playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
+        credential: "Amazon Web Services"
+        controller_config_file: "controller.cfg"
+        validate_certs: false

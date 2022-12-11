@@ -29,6 +29,16 @@ variables:
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
 
+
+lint:
+  image: registry.access.redhat.com/ubi9/python-39
+  stage: validate
+  script:
+    - pip3 install ansible-lint
+    - ansible-lint 1-ansible-automation-platform
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+
 fmt:
   extends: .terraform:fmt
   needs: []
@@ -52,7 +62,7 @@ build:
       changes:
         - 0-deploy-demo-infra/*
 
-Create ec2 instance:
+create-ec2-instance:
   image: registry.access.redhat.com/ubi9/python-39
   stage: create-vm
   script:
@@ -62,7 +72,6 @@ Create ec2 instance:
         -d "{\"extra_vars\": {\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"image_id\": \"$image_id\" }}"
         -H "Authorization: Bearer $TF_VAR_aap_token"
         https://controller.rhdemo.win/api/v2/job_templates/9/launch/
-  allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
 

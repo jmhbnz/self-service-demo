@@ -2,7 +2,7 @@
 - name: Create an rhel ec2 instance
   hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: false
 
   tasks:
 
@@ -17,6 +17,6 @@
         network:
           assign_public_ip: false
         image_id: "{{ lookup('env', 'image_id') }}"
-        wait: yes
+        wait: true
         tags:
           type: "webserver"
