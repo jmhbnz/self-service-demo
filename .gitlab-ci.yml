@@ -52,8 +52,9 @@ build:
       changes:
         - 0-deploy-demo-infra/*
 
-create-vm:
+Create ec2 instance:
   image: registry.access.redhat.com/ubi9/python-39
+  stage: create-vm
   script:
     - pip3 install awxkit
     - >
@@ -64,7 +65,6 @@ create-vm:
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
-      when: manual
 
 deploy:
   extends: .terraform:deploy
