@@ -122,4 +122,3 @@
               variable: "tags_purpose"
               required: true
               default: ""
-
