@@ -25,6 +25,9 @@ variables:
   rhel_version:
     description: "Enter the RHEL version"
     value: "9.1"
+  tags_purpose:
+    description: "Enter a purpose tag for the instance"
+    value: "demo"
 
 before_script:
   - export TF_ROOT="0-deploy-demo-infra"
@@ -70,7 +73,7 @@ create-ec2-instance:
     - >
         awx --conf.token "$TF_VAR_aap_token" -k --conf.host https://controller.rhdemo.win
         job_templates launch "Create ec2 instance"
-        --extra_vars "{\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"rhel_version\": \"$rhel_version\" }"
+        --extra_vars "{\"region\": \"$region\", \"instance_type\": \"$instance_type\", \"rhel_version\": \"$rhel_version\", \"tags_purpose\": \"$tags_purpose\" }"
         --monitor
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
