@@ -1,22 +1,22 @@
 ---
-- name: Create an rhel ec2 instance
+- name: Create a rhel aws ec2 instance
   hosts: localhost
   connection: local
   gather_facts: false
 
   tasks:
 
-    - name: Create the EC2 instance
+    - name: Create a rhel aws ec2 instance
       amazon.aws.ec2_instance:
-        name: "demo-ec2-instance"
+        name: "{{ tags_purpose }}-ec2-instance"
         key_name: "{{ lookup('env', 'key_pair') | default('rhel-demo-dev-linux-ap-southeast-2') }}"
         vpc_subnet_id: "{{ lookup('env', 'subnet_id') | default('subnet-000af6e79d9951160') }}"
-        instance_type: "{{ lookup('env', 'instance_type').split(' ')[0] }}"
+        instance_type: "{{ instance_type.split(' ')[0] | default('t2.micro') }}"
         security_group: "default"
-        region: "{{ lookup('env', 'region').split(' ')[0] }}"
+        region: "{{ region.split(' ')[0] | default('ap-southeast-2') }}"
         network:
           assign_public_ip: false
-        image_id: "{{ lookup('env', 'image_id') }}"
+        image_id: "ami-0b4ee18dc73d90a7b"
         wait: true
         tags:
-          purpose: "{{ lookup('env', 'tags_purpose') }}"
+          purpose: "{{ tags_purpose }}"

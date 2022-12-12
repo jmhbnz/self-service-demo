@@ -41,6 +41,7 @@
         scm_type: "git"
         scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
         controller_config_file: "controller.cfg"
+        scm_update_on_launch: true
 
     - name: "Add credential for aws"
       credential:
@@ -81,11 +82,7 @@
         description: >
           Use this catalog item to request a non-production virtual machine for a development environment.
 
-          ‎
-
           Select the region, instance type and operating system version.
-
-          ‎
 
           Approved requests will be provisioned automatically within 5 minutes. Requests with an instance_type of "t2.micro" will be automatically approved.
         project: "Cloud adoption"
@@ -119,3 +116,10 @@
               default: "8.7"
               required: true
               choices: ["8.7", "9.1"]
+            - type: "text"
+              question_name: "Tag"
+              question_description: "Provide a tag to indicate what this environment will be used for."
+              variable: "tags_purpose"
+              required: true
+              default: ""
+
