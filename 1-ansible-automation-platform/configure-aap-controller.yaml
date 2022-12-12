@@ -104,7 +104,7 @@
               variable: "region"
               required: true
               default: "ap-southeast-2 Sydney"
-              choices: ["ap-southeast-1 Singapore", "ap-southeast-2 Sydney","ap-southeast-3 Jakarta"]
+              choices: ["ap-southeast-1 Singapore", "ap-southeast-2 Sydney", "ap-southeast-3 Jakarta"]
             - type: "multiplechoice"
               question_name: "Instance Type"
               question_description: "What instance type should the developer environment use?"
