@@ -72,3 +72,50 @@
         credential: "Amazon Web Services"
         survey_enabled: false
         controller_config_file: "controller.cfg"
+
+    - name: "Add job for creating developer workstation"
+      job_template:
+        name: "Development environment"
+        organization: "Default"
+        state: "present"
+        description: >
+          Use this catalog item to request a non-production virtual machine for a development environment.
+
+          ‎
+
+          Select the region, instance type and operating system version.
+
+          ‎
+
+          Approved requests will be provisioned automatically within 5 minutes. Requests with an instance_type of "t2.micro" will be automatically approved.
+        project: "Cloud adoption"
+        inventory: "Localhost"
+        playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
+        credential: "Amazon Web Services"
+        controller_config_file: "controller.cfg"
+        survey_enabled: true
+        survey_spec:
+          name: "Options"
+          description: "Survey for new environment."
+          spec:
+            - type: "multiplechoice"
+              question_name: "Region"
+              question_description: "What region should the developer environment be created in?"
+              variable: "region"
+              required: true
+              default: "ap-southeast-2 Sydney"
+              choices: ["ap-southeast-1 Singapore", "ap-southeast-2 Sydney","ap-southeast-3 Jakarta"]
+            - type: "multiplechoice"
+              question_name: "Instance Type"
+              question_description: "What instance type should the developer environment use?"
+              variable: "type"
+              required: true
+              default: "t2.micro 1vCPU 1GiB Mem"
+              choices: ["t2.micro 1vCPU 1GiB Mem", "t2.medium 2vCPU 4GiB Mem", "t2.large 2vCPU 8GiB Mem"]
+            - type: "multiplechoice"
+              question_name: "RHEL Version"
+              question_description: "What version of Red Hat Enterprise Linux should be running?"
+              variable: "rhel_version"
+              default: "8.7"
+              required: true
+              choices: ["8.7", "9.1"]

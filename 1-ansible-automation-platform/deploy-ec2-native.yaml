@@ -11,12 +11,12 @@
         name: "demo-ec2-instance"
         key_name: "{{ lookup('env', 'key_pair') | default('rhel-demo-dev-linux-ap-southeast-2') }}"
         vpc_subnet_id: "{{ lookup('env', 'subnet_id') | default('subnet-000af6e79d9951160') }}"
-        instance_type: "{{ lookup('env', 'instance_type') }}"
+        instance_type: "{{ lookup('env', 'instance_type').split(' ')[0] }}"
         security_group: "default"
-        region: "{{ lookup('env', 'region') }}"
+        region: "{{ lookup('env', 'region').split(' ')[0] }}"
         network:
           assign_public_ip: false
         image_id: "{{ lookup('env', 'image_id') }}"
         wait: true
         tags:
-          type: "webserver"
+          purpose: "{{ lookup('env', 'tags_purpose') }}"
