@@ -9,7 +9,7 @@
     - name: Create a rhel aws ec2 instance
       amazon.aws.ec2_instance:
         name: "{{ tags_purpose }}-ec2-instance"
-        key_name: "{{ lookup('env', 'key_pair') | default('rhel-demo-dev-linux-ap-southeast-2') }}"
+        key_name: "rhel-demo-dev-linux-ap-southeast-2"
         vpc_subnet_id: "subnet-0c1e1e7b295bd23db"
         instance_type: "{{ instance_type.split(' ')[0] | default('t2.micro') }}"
         security_group: "default"
