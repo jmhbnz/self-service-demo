@@ -105,7 +105,7 @@
             - type: "multiplechoice"
               question_name: "Instance Type"
               question_description: "What instance type should the developer environment use?"
-              variable: "type"
+              variable: "instance_type"
               required: true
               default: "t2.micro 1vCPU 1GiB Mem"
               choices: ["t2.micro 1vCPU 1GiB Mem", "t2.medium 2vCPU 4GiB Mem", "t2.large 2vCPU 8GiB Mem"]
