@@ -4,7 +4,27 @@
 
 This guide will cover configuring [[https://www.ansible.com/products/automation-platform][Ansible Automation Platform]] with a self service aws ec2 virtual machine provisioning and management example. The intent of this guide is to make it easy to demonstrate the self service capabilities of Ansible Automation Platform.
 
+We need to spin up demonstration environments quickly then throw them away again when finished, with this in mind we will automate our entire configuration for ansible automation controller using the [[https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/][automation controller]] ansible collection.
+
+Using this approach our entire demo configuration can be completed by running a single playbook below.
+
 #+NAME: Configure aap as code
 #+begin_src tmate
+# Create controller.cfg file
+cat << EOF > controller.cfg
+[general]
+host=https://<controller-url>
+username=<username>
+password=<password>
+EOF
+
+# Set variables to create aws credential in aap
+export TF_VAR_aws_secret_key=<secret key>
+export TF_VAR_aws_access_key=<access key>
+
+# Set variable to create gitlab credential in aap
+export TF_VAR_gitlab_token=<deploy token>
+
+# Run ansible playbook
 ansible-playbook configure-aap-controller.yaml
 #+end_src
