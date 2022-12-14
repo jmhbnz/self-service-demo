@@ -18,4 +18,4 @@ RUN cd boost_1_79_0 &&  ./bootstrap.sh --prefix=/usr/ \
 
 RUN g++ -pthread hwapp.cpp -o hwapp
 
-CMD ["./hwapp 0.0.0.0 80"]
+CMD ["./app/hwapp 0.0.0.0 8080"]
