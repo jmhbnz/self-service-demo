@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Update package cache
+      package_facts:
+        manager: auto
+
+    - name: Install available updates
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Reboot server if required
+      reboot:
+        when: ansible_facts.packages | selectattr("state", "equalto", "installed") | list | length > 0
+        reboot_timeout: 600
+        msg: Rebooting the system to apply updates
+      async: 1
+      poll: 0
