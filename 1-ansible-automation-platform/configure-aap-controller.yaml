@@ -8,6 +8,34 @@
 
   tasks:
 
+    - name: "Remove the default demo inventory"
+      inventory:
+        name: "Demo Inventory"
+        organization: "Default"
+        state: "absent"
+        controller_config_file: "controller.cfg"
+
+    - name: "Remove the default demo credential"
+      credential:
+        name: "Demo Credential"
+        state: "absent"
+        credential_type: "Machine"
+        controller_config_file: "controller.cfg"
+
+    - name: "Remove the default demo project"
+      project:
+        name: "Demo Project"
+        organization: "Default"
+        state: "absent"
+        controller_config_file: "controller.cfg"
+
+    - name: "Remove the default demo job template"
+      job_template:
+        name: "Demo Job Template"
+        organization: "Default"
+        state: "absent"
+        controller_config_file: "controller.cfg"
+
     - name: "Create gitlab source control credential"
       credential:
         name: "Gitlab"

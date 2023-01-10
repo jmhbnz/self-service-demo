@@ -19,6 +19,7 @@ export TF_VAR_aws_access_key=placeholder
 export TF_VAR_cloudflare_token=placeholder
 export TF_VAR_cloudflare_zone_id=placeholder
 export TF_VAR_aap_token=placeholder
+export TF_VAR_aap_password=placeholder
 EOF
 #+end_src
 
