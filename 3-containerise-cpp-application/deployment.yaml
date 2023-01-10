@@ -61,3 +61,42 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpp-app-standard
+  namespace: cpp-app
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    deployment: cpp-app
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cpp-app-standard
+  namespace: cpp-app
+spec:
+  host: standard-cpp-app.apps.rosa-rwpk8.u0r0.p1.openshiftapps.com
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: cpp-app-standard
+    weight: 100
+  wildcardPolicy: None
