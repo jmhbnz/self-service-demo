@@ -16,7 +16,7 @@
       register: subnet_info
 
     - debug:
-      msg: "Subnet ID: {{ subnet_info.subnets[0].id }}"
+        msg: "Subnet ID: {{ subnet_info.subnets[0].id }}"
 
     - name: Create a rhel aws ec2 instance
       amazon.aws.ec2_instance:

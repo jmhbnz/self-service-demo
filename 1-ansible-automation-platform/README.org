@@ -25,3 +25,11 @@ EOF
 # Run ansible playbook
 ansible-playbook configure-aap-controller.yaml
 #+end_src
+
+
+Once ansible automation platform is configured we can test running a workflow using the following additional playbook.
+
+#+NAME: Launch a job template
+#+begin_src tmate
+ansible-playbook run-aap-job.yaml
+#+end_src
