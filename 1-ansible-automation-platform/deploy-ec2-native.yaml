@@ -6,11 +6,23 @@
 
   tasks:
 
+    - name: Retrieve the default vpc subnet id
+      ec2_vpc_subnet_info:
+        region: "{{ region }}"
+        filters:
+          - name: "tag:Name"
+            values:
+              - "my-subnet"
+      register: subnet_info
+
+    - debug:
+      msg: "Subnet ID: {{ subnet_info.subnets[0].id }}"
+
     - name: Create a rhel aws ec2 instance
       amazon.aws.ec2_instance:
         name: "{{ tags_purpose }}-ec2-instance"
         key_name: "rhel-demo-dev-linux-ap-southeast-2"
-        vpc_subnet_id: "subnet-0c1e1e7b295bd23db"
+        vpc_subnet_id: "{{ subnet_info.subnets[0].id }}"
         instance_type: "{{ instance_type.split(' ')[0] | default('t2.micro') }}"
         security_group: "default"
         region: "{{ region.split(' ')[0] | default('ap-southeast-2') }}"
