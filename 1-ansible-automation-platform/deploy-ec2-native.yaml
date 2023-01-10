@@ -10,9 +10,7 @@
       ec2_vpc_subnet_info:
         region: "{{ region }}"
         filters:
-          - name: "tag:Name"
-            values:
-              - "my-subnet"
+          "tag:Name": "rhel-demo-dev-public-subnet"
       register: subnet_info
 
     - debug:
