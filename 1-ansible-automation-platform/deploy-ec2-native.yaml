@@ -14,7 +14,11 @@
       register: subnet_info
 
     - debug:
-        msg: "Subnet ID: {{ subnet_info.subnets[0].id }}"
+        msg:
+          - "Subnet identified: {{ subnet_info.subnets[0].id }}"
+          - "Region input: {{ region }}"
+          - "Instance type: {{ instance_type }}"
+          - "Purpose: {{ tags_purpose }}"
 
     - name: Create a rhel aws ec2 instance
       amazon.aws.ec2_instance:
