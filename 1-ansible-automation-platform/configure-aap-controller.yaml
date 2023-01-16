@@ -103,6 +103,20 @@
         ask_variables_on_launch: true
         controller_config_file: "controller.cfg"
 
+    - name: "Add job template for installing jboss."
+      job_template:
+        name: "Install jboss middleware"
+        organization: "Default"
+        state: "present"
+        description: "Job template to install jboss web server."
+        project: "Cloud adoption"
+        inventory: "Localhost"
+        playbook: "1-ansible-automation-platform/install-jboss-middleware.yaml"
+        credential: "Amazon Web Services"
+        survey_enabled: false
+        ask_variables_on_launch: true
+        controller_config_file: "controller.cfg"
+
     - name: "Add job for creating developer workstation"
       job_template:
         name: "Development environment"
