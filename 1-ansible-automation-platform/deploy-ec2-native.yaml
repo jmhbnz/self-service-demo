@@ -33,4 +33,5 @@
         image_id: "ami-0b4ee18dc73d90a7b"
         wait: true
         tags:
+          type: "demo"
           purpose: "{{ tags_purpose }}"
