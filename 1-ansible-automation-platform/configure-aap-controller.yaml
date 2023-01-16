@@ -89,6 +89,24 @@
         state: "present"
         controller_config_file: "controller.cfg"
 
+    - name: "Add middleware team ec2 inventory."
+      inventory:
+        name: "AWS Middleware non-production"
+        organization: "Default"
+        state: "present"
+        controller_config_file: "controller.cfg"
+
+    - name: "Add cloud source for middleware inventory."
+      inventory_source:
+        name: "AWS Middleware non-production"
+        inventory: "AWS Middleware non-production"
+        source: "ec2"
+        credential: "Amazon Web Services"
+        host_filter: "world"
+        source_vars:
+          region: "ap-southeast-2"
+        controller_config_file: "controller.cfg"
+
     - name: "Add job template for creating virtual machines."
       job_template:
         name: "Create ec2 instance"
