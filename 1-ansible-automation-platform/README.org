@@ -1,8 +1,8 @@
-#+TITLE: Configure ansible automation platform
+#+TITLE: Configure ansible automation controller
 #+AUTHOR: James Blair <jablair@redhat.com>
 #+DATE: 14th November 2022
 
-This guide will cover configuring [[https://www.ansible.com/products/automation-platform][Ansible Automation Platform]] with a self service aws ec2 virtual machine provisioning and management example. The intent of this guide is to make it easy to demonstrate the self service capabilities of Ansible Automation Platform.
+This guide will cover configuring [[https://www.ansible.com/products/controller][Ansible Automation Controller]] with a self service aws ec2 virtual machine provisioning and management example. The intent of this guide is to make it easy to demonstrate the self service capabilities of Ansible Automation Platform.
 
 We need to spin up demonstration environments quickly then throw them away again when finished, with this in mind we will automate our entire configuration for ansible automation controller using the [[https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller/][automation controller]] ansible collection.
 
