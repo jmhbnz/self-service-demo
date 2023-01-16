@@ -102,6 +102,7 @@
         inventory: "AWS Middleware non-production"
         source: "ec2"
         credential: "Amazon Web Services"
+        overwrite: true
         source_vars:
           filters:
             tag:type: demo
