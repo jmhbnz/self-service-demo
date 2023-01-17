@@ -89,6 +89,7 @@
         state: "present"
         credential_type: "Machine"
         inputs:
+          username: "ec2-user"
           ssh_key_data: "{{ lookup('file', '../0-deploy-demo-infra/rhel-demo-dev-linux-ap-southeast-2.pem')  }}"
         controller_config_file: "controller.cfg"
 
