@@ -26,7 +26,7 @@
         key_name: "rhel-demo-dev-linux-ap-southeast-2"
         vpc_subnet_id: "{{ subnet_info.subnets[0].id }}"
         instance_type: "{{ instance_type.split(' ')[0] | default('t2.micro') }}"
-        security_group: "default"
+        security_group: "rhel-demo-dev-linux-sg"
         region: "{{ region.split(' ')[0] | default('ap-southeast-2') }}"
         network:
           assign_public_ip: false
