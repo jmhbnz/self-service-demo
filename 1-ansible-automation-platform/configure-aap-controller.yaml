@@ -82,6 +82,16 @@
           username: "{{ lookup('env', 'TF_VAR_aws_access_key') }}"
         controller_config_file: "controller.cfg"
 
+    - name: "Add machine credential for aws hosts"
+      credential:
+        name: "Amazon Web Services Machine"
+        organization: "Default"
+        state: "present"
+        credential_type: "Machine"
+        inputs:
+          ssh_key_data: "{{ lookup('file', '../0-deploy-demo-infra/rhel-demo-dev-linux-ap-southeast-2.pem')  }}"
+        controller_config_file: "controller.cfg"
+
     - name: "Add localhost inventory"
       inventory:
         name: "Localhost"
@@ -89,14 +99,14 @@
         state: "present"
         controller_config_file: "controller.cfg"
 
-    - name: "Add middleware team ec2 inventory."
+    - name: "Add middleware team ec2 inventory"
       inventory:
         name: "AWS Middleware non-production"
         organization: "Default"
         state: "present"
         controller_config_file: "controller.cfg"
 
-    - name: "Add cloud source for middleware inventory."
+    - name: "Add cloud source for middleware inventory"
       inventory_source:
         name: "AWS Middleware non-production"
         inventory: "AWS Middleware non-production"
@@ -108,7 +118,7 @@
             tag:type: demo
         controller_config_file: "controller.cfg"
 
-    - name: "Add job template for creating virtual machines."
+    - name: "Add job template for creating virtual machines"
       job_template:
         name: "Create ec2 instance"
         organization: "Default"
@@ -122,14 +132,14 @@
         ask_variables_on_launch: true
         controller_config_file: "controller.cfg"
 
-    - name: "Add job template for installing jboss."
+    - name: "Add job template for installing jboss"
       job_template:
         name: "Install jboss middleware"
         organization: "Default"
         state: "present"
         description: "Job template to install jboss web server."
         project: "Cloud adoption"
-        inventory: "Localhost"
+        inventory: "AWS Middleware non-production"
         playbook: "1-ansible-automation-platform/install-jboss-middleware.yaml"
         credential: "Amazon Web Services"
         survey_enabled: false
