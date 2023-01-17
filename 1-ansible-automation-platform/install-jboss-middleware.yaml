@@ -33,6 +33,8 @@
     ansible_distribution: 'RedHat'
   collections:
     - middleware_automation.redhat_csp_download
+    - middleware_automation.jws
+    - middleware_automation.common_criteria
   roles:
     - redhat_csp_download
     - jws
