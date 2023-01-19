@@ -35,4 +35,5 @@
         wait: true
         tags:
           type: "demo"
+          Name: "{{ tags_purpose }}"
           purpose: "{{ tags_purpose }}"
