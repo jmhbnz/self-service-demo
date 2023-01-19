@@ -1,7 +1,7 @@
 ---
 - name: "Red Hat JBoss Web Server installation and configuration"
   hosts: "all"
-  become: yes
+  become: true
   vars:
     tomcat_setup: true
     tomcat_version: 9.0.50
