@@ -17,6 +17,9 @@ inventory
 # Controller config files
 *.cfg
 
+# Controller license files
+*manifest.zip
+
 # Environment variable files
 .env
 
