@@ -71,6 +71,17 @@
         controller_config_file: "controller.cfg"
         scm_update_on_launch: true
 
+    - name: "Add project for linux patching"
+      project:
+        name: "Linux patching"
+        description: "Linux server patching automation."
+        organization: "Default"
+        state: "present"
+        scm_type: "git"
+        scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
+        controller_config_file: "controller.cfg"
+        scm_update_on_launch: true
+
     - name: "Add credential for aws"
       credential:
         name: "Amazon Web Services"
@@ -143,6 +154,20 @@
         inventory: "AWS Middleware non-production"
         playbook: "1-ansible-automation-platform/install-jboss-middleware.yaml"
         credential: "Amazon Web Services"
+        survey_enabled: false
+        ask_variables_on_launch: true
+        controller_config_file: "controller.cfg"
+
+    - name: "Add job template for patching server"
+      job_template:
+        name: "Patch rhel server"
+        organization: "Default"
+        state: "present"
+        description: "Job template to patch a rhel server."
+        project: "Linux patching"
+        inventory: "AWS Middleware non-production"
+        playbook: "1-ansible-automation-platform/patch-rhel-server.yaml"
+        credential: "Amazon Web Services Machine"
         survey_enabled: false
         ask_variables_on_launch: true
         controller_config_file: "controller.cfg"
