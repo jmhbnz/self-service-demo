@@ -10,8 +10,8 @@
 
     - name: "Set the controller license using a file."
       license:
-       manifest: "manifest.zip"
-       controller_config_file: "controller.cfg"
+        manifest: "manifest.zip"
+        controller_config_file: "controller.cfg"
 
     # - name: "Generate a new admin user token."
     #  token:
