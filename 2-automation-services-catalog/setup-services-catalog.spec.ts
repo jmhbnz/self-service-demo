@@ -33,6 +33,24 @@ test('test', async ({ page }) => {
     await page.getByRole('button', { name: 'Add' }).click();
     await page.getByRole('button', { name: 'open menu' }).click();
     await page.getByRole('option', { name: 'Automation Controller' }).click();
-    await page.locator('[id="\\33 "]').check();
+
+    await page.waitForSelector('.pf-c-card');
+
+    await page.evaluate(() => {
+        const elements = Array.from(document.querySelectorAll("*"));
+        const element = elements.find(el => el.textContent.trim() === 'Development environment');
+
+        if (element) {
+            const parent = element.closest(".pf-c-card");
+            console.log(parent)
+            if (parent) {
+                const checkbox = parent.querySelector("input[type='checkbox']");
+                if (checkbox) {
+                    checkbox.click();
+                }
+            }
+        }
+    });
+
     await page.getByTitle('Add').click();
 });
