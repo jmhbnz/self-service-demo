@@ -13,7 +13,7 @@
        manifest: "manifest.zip"
        controller_config_file: "controller.cfg"
 
-    #- name: "Generate a new admin user token."
+    # - name: "Generate a new admin user token."
     #  token:
     #    description: "Admin token for pipeline use."
     #    scope: "write"
@@ -21,7 +21,7 @@
     #    controller_config_file: "controller.cfg"
     #  register: token_results
 
-    #- name: "Update new token to .env file."
+    # - name: "Update new token to .env file."
     #  lineinfile:
     #    path: "../.env"
     #    regexp: "^export TF_VAR_app_token="
