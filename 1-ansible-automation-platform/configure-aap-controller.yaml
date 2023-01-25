@@ -8,6 +8,25 @@
 
   tasks:
 
+    - name: "Set the controller license using a file."
+      license:
+       manifest: "manifest.zip"
+       controller_config_file: "controller.cfg"
+
+    #- name: "Generate a new admin user token."
+    #  token:
+    #    description: "Admin token for pipeline use."
+    #    scope: "write"
+    #    state: present
+    #    controller_config_file: "controller.cfg"
+    #  register: token_results
+
+    #- name: "Update new token to .env file."
+    #  lineinfile:
+    #    path: "../.env"
+    #    regexp: "^export TF_VAR_app_token="
+    #    line: 'export TF_VAR_app_token={{ token_results.ansible_facts.controller_token.token }}'
+
     - name: "Remove the default demo inventory"
       inventory:
         name: "Demo Inventory"
