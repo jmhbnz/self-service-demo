@@ -37,3 +37,8 @@
           type: "demo"
           Name: "{{ tags_purpose }}"
           purpose: "{{ tags_purpose }}"
+        register: instance
+
+    - name: "Output new instance details."
+      debug:
+        msg: "{{ instance }}"
