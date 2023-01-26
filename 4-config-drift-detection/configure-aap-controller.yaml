@@ -15,14 +15,14 @@
         organization: "Default"
         state: "present"
         scm_type: "git"
-        scm_url: "https://github.com/ansible-lockdown/RHEL8-CIS"
+        scm_url: "https://github.com/jmhbnz/RHEL8-CIS"
         controller_config_file: "controller.cfg"
-        scm_update_on_launch: true
+        scm_update_on_launch: false
 
 
     - name: "Add job template for enforcing cis level one"
       job_template:
-        name: "Enforce compliance benchmark"
+        name: "Audit compliance benchmark"
         organization: "Default"
         state: "present"
         description: "Job template to check compliance on a host."
@@ -31,4 +31,15 @@
         playbook: "site.yml"
         credential: "Amazon Web Services Machine"
         job_tags: "level1-server"
+        skip_tags:
+          "rule_5.2.14"
+        extra_vars:
+          rhel8cis_run_audit: true
+        controller_config_file: "controller.cfg"
+
+    - name: "Create schedule for audit job to run every 15 minutes"
+      schedule:
+        name: "Audit compliance benchmark"
+        rrule: "DTSTART:20230124T202445Z RRULE:FREQ=MINUTELY;INTERVAL=15"
+        unified_job_template: "Audit compliance benchmark"
         controller_config_file: "controller.cfg"
