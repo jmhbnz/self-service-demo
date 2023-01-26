@@ -1,0 +1,34 @@
+---
+- name: Configure automation controller
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - awx.awx
+
+  tasks:
+
+    - name: "Add project for drift detection"
+      project:
+        name: "Configuration management"
+        description: "Configuration management and drift detection automation."
+        organization: "Default"
+        state: "present"
+        scm_type: "git"
+        scm_url: "https://github.com/ansible-lockdown/RHEL8-CIS"
+        controller_config_file: "controller.cfg"
+        scm_update_on_launch: true
+
+
+    - name: "Add job template for enforcing cis level one"
+      job_template:
+        name: "Enforce compliance benchmark"
+        organization: "Default"
+        state: "present"
+        description: "Job template to check compliance on a host."
+        project: "Configuration management"
+        inventory: "AWS Middleware non-production"
+        playbook: "site.yml"
+        credential: "Amazon Web Services Machine"
+        job_tags: "level1-server"
+        controller_config_file: "controller.cfg"
