@@ -88,7 +88,7 @@
         scm_type: "git"
         scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
         controller_config_file: "controller.cfg"
-        scm_update_on_launch: true
+        scm_update_on_launch: false
 
     - name: "Add project for linux patching"
       project:
@@ -99,7 +99,7 @@
         scm_type: "git"
         scm_url: "https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance.git"
         controller_config_file: "controller.cfg"
-        scm_update_on_launch: true
+        scm_update_on_launch: false
 
     - name: "Add credential for aws"
       credential:
