@@ -39,6 +39,15 @@
           purpose: "{{ tags_purpose }}"
       register: instance
 
-    - name: "Output new instance details."
-      debug:
-        msg: "{{ instance }}"
+    - name: "Allocate and associate an elastic ip address"
+      amazon.aws.ec2_eip:
+        state: present
+        instance_id: "{{ instances.instance_ids[0] }}"
+        wait: yes
+      register: eip
+
+    - name: "Add the elastic ip to the instance"
+      amazon.aws.ec2_eip_association:
+        public_ip: "{{ eip.public_ip }}"
+        instance_id: "{{ instance.instance_ids[0] }}"
+        wait: yes
