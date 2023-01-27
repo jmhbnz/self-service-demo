@@ -32,6 +32,7 @@
           assign_public_ip: false
         image_id: "ami-0b4ee18dc73d90a7b"
         user_data: "{{ lookup('file', '../0-deploy-demo-infra/aws-user-data.sh') | b64encode }}"
+        state: running
         wait: true
         tags:
           type: "demo"
