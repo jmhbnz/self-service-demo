@@ -149,6 +149,13 @@
             tag:type: demo
         controller_config_file: "controller.cfg"
 
+    - name: "Create schedule for inventory sync to run every 5 minutes."
+      schedule:
+        name: "Cloud inventory sync"
+        rrule: "DTSTART:20230124T202445Z RRULE:FREQ=MINUTELY;INTERVAL=5"
+        unified_job_template: "AWS Middleware non-production"
+        controller_config_file: "controller.cfg"
+
     - name: "Add job template for creating virtual machines"
       job_template:
         name: "Create ec2 instance"

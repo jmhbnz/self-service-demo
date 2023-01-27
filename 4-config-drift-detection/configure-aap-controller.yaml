@@ -19,7 +19,6 @@
         controller_config_file: "controller.cfg"
         scm_update_on_launch: false
 
-
     - name: "Add job template for enforcing cis level one"
       job_template:
         name: "Audit compliance benchmark"
