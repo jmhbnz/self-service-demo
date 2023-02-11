@@ -23,7 +23,7 @@ verify_ssl = false
 EOF
 
 # Run ansible playbook
-ansible-playbook configure-aap-controller.yaml
+ansible-playbook configure-aap-controller.yaml --extra-vars first_run=true
 #+end_src
 
 
