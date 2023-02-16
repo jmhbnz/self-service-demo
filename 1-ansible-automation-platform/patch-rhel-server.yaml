@@ -4,17 +4,17 @@
   tasks:
 
     - name: Update package cache
-      package_facts:
+      ansible.builtin.package_facts:
         manager: auto
 
     - name: Install available updates
-      yum:
+      ansible.builtin.yum:
         name: "*"
         state: latest
       register: updates
 
     - name: Reboot server if required
-      reboot:
+      ansible.builtin.reboot:
         reboot_timeout: 600
         msg: Rebooting the system to apply updates
       when: updates is changed

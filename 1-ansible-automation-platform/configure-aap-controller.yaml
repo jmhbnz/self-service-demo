@@ -9,12 +9,12 @@
   tasks:
 
     - name: "Set the controller license using a file."
-      license:
+      awx.awx.license:
         manifest: "manifest.zip"
         controller_config_file: "controller.cfg"
 
     - name: "Generate a new admin user token."
-      token:
+      awx.awx.token:
         description: "Admin token for pipeline use."
         scope: "write"
         state: present
@@ -23,42 +23,42 @@
       when: first_run == true
 
     - name: "Update new token to .env file."
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: "../.env"
         regexp: "^export TF_VAR_app_token="
         line: 'export TF_VAR_app_token={{ token_results.ansible_facts.controller_token.token }}'
       when: first_run == true
 
     - name: "Remove the default demo inventory"
-      inventory:
+      awx.awx.inventory:
         name: "Demo Inventory"
         organization: "Default"
         state: "absent"
         controller_config_file: "controller.cfg"
 
     - name: "Remove the default demo credential"
-      credential:
+      awx.awx.credential:
         name: "Demo Credential"
         state: "absent"
         credential_type: "Machine"
         controller_config_file: "controller.cfg"
 
     - name: "Remove the default demo project"
-      project:
+      awx.awx.project:
         name: "Demo Project"
         organization: "Default"
         state: "absent"
         controller_config_file: "controller.cfg"
 
     - name: "Remove the default demo job template"
-      job_template:
+      awx.awx.job_template:
         name: "Demo Job Template"
         organization: "Default"
         state: "absent"
         controller_config_file: "controller.cfg"
 
     - name: "Create gitlab source control credential"
-      credential:
+      awx.awx.credential:
         name: "Gitlab"
         organization: "Default"
         state: "present"
@@ -69,7 +69,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Create gitlab container registry credential"
-      credential:
+      awx.awx.credential:
         name: "Gitlab Registry"
         organization: "Default"
         state: "present"
@@ -82,7 +82,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add project for infra creation"
-      project:
+      awx.awx.project:
         name: "Cloud adoption"
         description: "Cloud adoption automation."
         organization: "Default"
@@ -93,7 +93,7 @@
         scm_update_on_launch: false
 
     - name: "Add project for linux patching"
-      project:
+      awx.awx.project:
         name: "Linux patching"
         description: "Linux server patching automation."
         organization: "Default"
@@ -104,7 +104,7 @@
         scm_update_on_launch: false
 
     - name: "Add credential for aws"
-      credential:
+      awx.awx.credential:
         name: "Amazon Web Services"
         organization: "Default"
         state: "present"
@@ -115,7 +115,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add machine credential for aws hosts"
-      credential:
+      awx.awx.credential:
         name: "Amazon Web Services Machine"
         organization: "Default"
         state: "present"
@@ -126,21 +126,21 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add localhost inventory"
-      inventory:
+      awx.awx.inventory:
         name: "Localhost"
         organization: "Default"
         state: "present"
         controller_config_file: "controller.cfg"
 
     - name: "Add middleware team ec2 inventory"
-      inventory:
+      awx.awx.inventory:
         name: "AWS Middleware non-production"
         organization: "Default"
         state: "present"
         controller_config_file: "controller.cfg"
 
     - name: "Add cloud source for middleware inventory"
-      inventory_source:
+      awx.awx.inventory_source:
         name: "AWS Middleware non-production"
         inventory: "AWS Middleware non-production"
         source: "ec2"
@@ -152,14 +152,14 @@
         controller_config_file: "controller.cfg"
 
     - name: "Create schedule for inventory sync to run every 5 minutes."
-      schedule:
+      awx.awx.schedule:
         name: "Cloud inventory sync"
         rrule: "DTSTART:20230124T202445Z RRULE:FREQ=MINUTELY;INTERVAL=5"
         unified_job_template: "AWS Middleware non-production"
         controller_config_file: "controller.cfg"
 
     - name: "Add job template for creating virtual machines"
-      job_template:
+      awx.awx.job_template:
         name: "Create ec2 instance"
         organization: "Default"
         state: "present"
@@ -173,7 +173,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add job template for installing jboss"
-      job_template:
+      awx.awx.job_template:
         name: "Install jboss middleware"
         organization: "Default"
         state: "present"
@@ -187,7 +187,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add job template for patching server"
-      job_template:
+      awx.awx.job_template:
         name: "Patch rhel server"
         organization: "Default"
         state: "present"
@@ -201,7 +201,7 @@
         controller_config_file: "controller.cfg"
 
     - name: "Add job for creating developer workstation"
-      job_template:
+      awx.awx.job_template:
         name: "Development environment"
         organization: "Default"
         state: "present"

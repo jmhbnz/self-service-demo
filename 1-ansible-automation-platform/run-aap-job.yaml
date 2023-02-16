@@ -9,7 +9,7 @@
   tasks:
 
     - name: "Launch job to create an ec2 instance"
-      job_launch:
+      awx.awx.job_launch:
         job_template: "Create ec2 instance"
         controller_config_file: "controller.cfg"
         extra_vars:
