@@ -1,26 +1,27 @@
 ---
-- name: Create a rhel aws ec2 instance
+- name: "Create a rhel aws ec2 instance"
   hosts: localhost
   connection: local
   gather_facts: false
 
   tasks:
 
-    - name: Retrieve the default vpc subnet id
+    - name: "Retrieve the default vpc subnet id"
       ec2_vpc_subnet_info:
         region: "{{ region.split(' ')[0] | default('ap-southeast-2') }}"
         filters:
           "tag:Name": "rhel-demo-dev-public-subnet"
       register: subnet_info
 
-    - debug:
+    - name: "Print new vm variables"
+      debug:
         msg:
           - "Subnet identified: {{ subnet_info.subnets[0].id }}"
           - "Region input: {{ region }}"
           - "Instance type: {{ instance_type }}"
           - "Purpose: {{ tags_purpose }}"
 
-    - name: Create a rhel aws ec2 instance
+    - name: "Create a rhel aws ec2 instance"
       amazon.aws.ec2_instance:
         name: "{{ tags_purpose }}-ec2-instance"
         key_name: "rhel-demo-dev-linux-ap-southeast-2"
