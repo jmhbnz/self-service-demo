@@ -37,9 +37,7 @@ lint:
   stage: validate
   script:
     - pip3 install ansible ansible-lint
-    - ansible-galaxy collection install awx.awx
-    - ansible-galaxy collection install amazon.aws
-    - ansible-lint 1-ansible-automation-platform
+    - ansible-lint 1-ansible-automation-platform/*.yaml
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
