@@ -14,7 +14,7 @@
       register: subnet_info
 
     - name: "Print new vm variables"
-      debug:
+      ansible.builtin.debug:
         msg:
           - "Subnet identified: {{ subnet_info.subnets[0].id }}"
           - "Region input: {{ region }}"

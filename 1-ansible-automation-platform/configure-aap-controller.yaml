@@ -3,8 +3,6 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  collections:
-    - awx.awx
 
   tasks:
 
@@ -20,14 +18,14 @@
         state: present
         controller_config_file: "controller.cfg"
       register: token_results
-      when: first_run == true
+      when: first_run | default(false) | bool
 
     - name: "Update new token to .env file."
       ansible.builtin.lineinfile:
         path: "../.env"
         regexp: "^export TF_VAR_app_token="
         line: 'export TF_VAR_app_token={{ token_results.ansible_facts.controller_token.token }}'
-      when: first_run == true
+      when: first_run | default(false) | bool
 
     - name: "Remove the default demo inventory"
       awx.awx.inventory:
@@ -122,7 +120,7 @@
         credential_type: "Machine"
         inputs:
           username: "ec2-user"
-          ssh_key_data: "{{ lookup('file', '../0-deploy-demo-infra/rhel-demo-dev-linux-ap-southeast-2.pem')  }}"
+          ssh_key_data: "{{ lookup('file', '../0-deploy-demo-infra/rhel-demo-dev-linux-ap-southeast-2.pem') }}"
         controller_config_file: "controller.cfg"
 
     - name: "Add localhost inventory"
@@ -167,20 +165,6 @@
         project: "Cloud adoption"
         inventory: "Localhost"
         playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
-        credential: "Amazon Web Services"
-        survey_enabled: false
-        ask_variables_on_launch: true
-        controller_config_file: "controller.cfg"
-
-    - name: "Add job template for installing jboss"
-      awx.awx.job_template:
-        name: "Install jboss middleware"
-        organization: "Default"
-        state: "present"
-        description: "Job template to install jboss web server."
-        project: "Cloud adoption"
-        inventory: "AWS Middleware non-production"
-        playbook: "1-ansible-automation-platform/install-jboss-middleware.yaml"
         credential: "Amazon Web Services"
         survey_enabled: false
         ask_variables_on_launch: true

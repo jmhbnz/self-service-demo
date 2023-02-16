@@ -1,10 +1,8 @@
 ---
-- name: Launch an automation controller job
+- name: "Launch an automation controller job"
   hosts: localhost
   connection: local
   gather_facts: false
-  collections:
-    - awx.awx
 
   tasks:
 
@@ -15,5 +13,5 @@
         extra_vars:
           region: "ap-southeast-2"
           instance_type: "t2.micro"
-          rhel_version: "9.1"
+          rhel_version: "8.7"
           tags_purpose: "demo"

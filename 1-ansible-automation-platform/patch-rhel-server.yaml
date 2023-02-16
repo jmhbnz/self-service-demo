@@ -1,20 +1,21 @@
 ---
-- hosts: all
+- name: "Patch a rhel linux server"
+  hosts: all
   become: true
   tasks:
 
-    - name: Update package cache
+    - name: "Update package cache"
       ansible.builtin.package_facts:
         manager: auto
 
-    - name: Install available updates
+    - name: "Install available updates"
       ansible.builtin.yum:
         name: "*"
         state: latest
       register: updates
 
-    - name: Reboot server if required
+    - name: "Reboot server if required"
       ansible.builtin.reboot:
         reboot_timeout: 600
-        msg: Rebooting the system to apply updates
+        msg: "Rebooting the system to apply updates"
       when: updates is changed
