@@ -33,7 +33,7 @@
 
     - name: Obtain aap installer
       get_url:
-        url: https://gitlab.com/jmhbnz/terraform-aws-rhel-ec2-instance/-/package_files/61982964/download
+        url: https://gitlab.com/jmhbnz/self-service-demo/-/package_files/61982964/download
         dest: /home/ec2-user/aap-setup.tar.gz
         headers:
           DEPLOY-TOKEN: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"

@@ -36,7 +36,9 @@ lint:
   image: registry.access.redhat.com/ubi9/python-39
   stage: validate
   script:
-    - pip3 install ansible-lint
+    - pip3 install ansible ansible-lint
+    - ansible-galaxy collection install awx.awx
+    - ansible-galaxy collection install amazon.aws
     - ansible-lint 1-ansible-automation-platform
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
