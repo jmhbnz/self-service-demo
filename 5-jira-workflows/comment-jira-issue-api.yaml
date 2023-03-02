@@ -1,0 +1,24 @@
+---
+- name: Comment on a jira issue via api
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: "Comment on a jira issue via api"
+      ansible.builtin.uri:
+        url: "http://localhost:8080/rest/api/2/issue/{{ jira_issue }}/comment"
+        user: "{{ jira_username }}"
+        password: "{{ jira_password }}"
+        method: "POST"
+        body:
+          body: "New team member 'newbie' has been granted vault access successfully."
+        force_basic_auth: true
+        status_code: 201
+        body_format: "json"
+      register: results
+
+    - name: "Output jira comment creation results"
+      ansible.builtin.debug:
+        var: results.json

@@ -1,0 +1,44 @@
+---
+- name: Configure automation controller
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: "Create jira api credential"
+      awx.awx.credential:
+        name: "Jira"
+        organization: "Default"
+        state: "present"
+        credential_type: "Source Control"
+        inputs:
+          username: "read_only_public_repo"
+          password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+        controller_config_file: "controller.cfg"
+
+    - name: "Add project for jira self-service"
+      awx.awx.project:
+        name: "Self-service"
+        description: "Jira self-service integration."
+        organization: "Default"
+        state: "present"
+        scm_type: "git"
+        scm_url: "https://gitlab.com/jmhbnz/self-service-demo.git"
+        controller_config_file: "controller.cfg"
+        scm_update_on_launch: false
+
+    - name: "Add job template for vault onboarding"
+      awx.awx.job_template:
+        name: "Onboarding - Vault"
+        organization: "Default"
+        state: "present"
+        description: "Job template to create an aws ec2 instance."
+        project: "Cloud adoption"
+        inventory: "Localhost"
+        playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
+        credential: "Amazon Web Services"
+        survey_enabled: false
+        ask_variables_on_launch: true
+        controller_config_file: "controller.cfg"
+
