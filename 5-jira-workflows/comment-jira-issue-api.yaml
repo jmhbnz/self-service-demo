@@ -8,7 +8,7 @@
 
     - name: "Comment on a jira issue via api"
       ansible.builtin.uri:
-        url: "http://localhost:8080/rest/api/2/issue/{{ jira_issue }}/comment"
+        url: "https://big-emus-lead-124-248-138-127.loca.lt/rest/api/2/issue/{{ jira_issue }}/comment"
         user: "{{ jira_username }}"
         password: "{{ jira_password }}"
         method: "POST"

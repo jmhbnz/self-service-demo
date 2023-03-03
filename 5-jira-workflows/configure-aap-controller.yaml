@@ -6,15 +6,38 @@
 
   tasks:
 
+    - name: "Create jira api credential type"
+      awx.awx.credential_type:
+        name: "Jira"
+        description: "Credentials type for jira"
+        kind: "cloud"
+        inputs:
+          fields:
+            - id: "username"
+              type: "string"
+              label: "username"
+              multiline: false
+            - id: "password"
+              type: "string"
+              label: "password"
+              secret: true
+              multiline: false
+        injectors:
+          extra_vars:
+            jira_username: "{% raw -%}{{ username }}{% endraw -%}"
+            jira_password: "{% raw -%}{{ password }}{% endraw -%}"
+        state: present
+        controller_config_file: "controller.cfg"
+
     - name: "Create jira api credential"
       awx.awx.credential:
         name: "Jira"
         organization: "Default"
         state: "present"
-        credential_type: "Source Control"
+        credential_type: "Jira"
         inputs:
-          username: "read_only_public_repo"
-          password: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
+          username: "{{ lookup('env', 'TF_VAR_jira_username') }}"
+          password: "{{ lookup('env', 'TF_VAR_jira_password') }}"
         controller_config_file: "controller.cfg"
 
     - name: "Add project for jira self-service"
@@ -34,11 +57,38 @@
         organization: "Default"
         state: "present"
         description: "Job template to create an aws ec2 instance."
-        project: "Cloud adoption"
+        project: "Self-service"
         inventory: "Localhost"
         playbook: "1-ansible-automation-platform/deploy-ec2-native.yaml"
         credential: "Amazon Web Services"
         survey_enabled: false
-        ask_variables_on_launch: true
+        ask_variables_on_launch: false
         controller_config_file: "controller.cfg"
 
+    - name: "Add job template for jira comment"
+      awx.awx.job_template:
+        name: "Jira comment"
+        organization: "Default"
+        state: "present"
+        description: ""
+        project: "Self-service"
+        inventory: "Localhost"
+        playbook: "5-jira-workflows/comment-jira-issue-api.yaml"
+        credential: "Jira"
+        survey_enabled: false
+        ask_variables_on_launch: false
+        controller_config_file: "controller.cfg"
+
+    - name: "Add job template for jira close"
+      awx.awx.job_template:
+        name: "Jira close"
+        organization: "Default"
+        state: "present"
+        description: ""
+        project: "Self-service"
+        inventory: "Localhost"
+        playbook: "5-jira-workflows/comment-jira-issue-api.yaml"
+        credential: "Jira"
+        survey_enabled: false
+        ask_variables_on_launch: false
+        controller_config_file: "controller.cfg"
