@@ -102,7 +102,7 @@
 
     - name: "Add job template for jira transition"
       awx.awx.job_template:
-        name: "Jira close"
+        name: "Jira transition"
         organization: "Default"
         state: "present"
         description: ""
@@ -122,22 +122,13 @@
         destroy_current_schema: true
         ask_variables_on_launch: true
 
-    - name: "Create workflow node for onboarding assign"
+    - name: "Create workflow node for done transition"
       awx.awx.workflow_job_template_node:
-        identifier: "Assign"
-        unified_job_template: "Jira assign"
-        workflow_job_template: "Onboarding"
-        credentials:
-          - "Jira onboarding"
-        controller_config_file: "controller.cfg"
-
-    - name: "Create workflow node for in progress transition"
-      awx.awx.workflow_job_template_node:
-        identifier: "In progress transition"
+        identifier: "Done transition"
         unified_job_template: "Jira transition"
         workflow_job_template: "Onboarding"
         extra_data:
-          jira_transition: 11
+          jira_transition: "21"
         credentials:
           - "Jira onboarding"
         controller_config_file: "controller.cfg"
@@ -150,19 +141,29 @@
         credentials:
           - "Jira onboarding"
         extra_data:
-          jira_comment: "This issue has been picked up by onboarding bot :)  You can track my progress here: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/jobs/workflow/{{ awx_workflow_job_id }}/output"
+          jira_comment: "This issue has been picked up by onboarding bot :)  You can track my progress here: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/jobs/workflow/{% raw -%}{{ awx_workflow_job_id }}{% endraw -%}/output"
         controller_config_file: "controller.cfg"
+        success_nodes:
+          - "Done transition"
 
-    - name: "Create workflow node for done transition"
+    - name: "Create workflow node for in progress transition"
       awx.awx.workflow_job_template_node:
-        identifier: "Done transition"
+        identifier: "In progress transition"
         unified_job_template: "Jira transition"
         workflow_job_template: "Onboarding"
         extra_data:
-          jira_transition: 61
+          jira_transition: "11"
+        credentials:
+          - "Jira onboarding" 
+        controller_config_file: "controller.cfg"
+        success_nodes:
+          - "Assigned comment"
+
+    - name: "Create workflow node for onboarding assign"
+      awx.awx.workflow_job_template_node:
+        identifier: "Assign"
+        unified_job_template: "Jira assign"
+        workflow_job_template: "Onboarding"
         credentials:
           - "Jira onboarding"
         controller_config_file: "controller.cfg"
-
-
-

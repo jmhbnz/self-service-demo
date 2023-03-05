@@ -6,6 +6,10 @@
 
   tasks:
 
+    - name: "Output supplied comment to logs"
+      debug:
+        var: jira_comment
+
     - name: "Comment on a jira issue via api"
       ansible.builtin.uri:
         url: "{{ jira_url }}/rest/api/2/issue/{{ jira_issue }}/comment"
