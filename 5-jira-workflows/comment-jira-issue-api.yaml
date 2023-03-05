@@ -13,7 +13,7 @@
         password: "{{ jira_password }}"
         method: "POST"
         body:
-          body: "New team member 'newbie' has been granted vault access successfully."
+          body: "{{ jira_comment }}"
         force_basic_auth: true
         status_code: 201
         body_format: "json"
