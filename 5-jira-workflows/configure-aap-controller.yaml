@@ -22,10 +22,16 @@
               label: "password"
               secret: true
               multiline: false
+            - id: "url"
+              type: "string"
+              label: "url"
+              secret: false
+              multiline: false
         injectors:
           extra_vars:
             jira_username: "{% raw -%}{{ username }}{% endraw -%}"
             jira_password: "{% raw -%}{{ password }}{% endraw -%}"
+            jira_url: "{% raw -%}{{ url }}{% endraw -%}"
         state: present
         controller_config_file: "controller.cfg"
 
@@ -38,6 +44,7 @@
         inputs:
           username: "{{ lookup('env', 'TF_VAR_jira_username') }}"
           password: "{{ lookup('env', 'TF_VAR_jira_password') }}"
+          url: "{{ lookup('env', 'TF_VAR_jira_url') }}"
         controller_config_file: "controller.cfg"
 
     - name: "Add project for jira self-service"

@@ -8,7 +8,7 @@
 
     - name: "Create jira issue via api"
       ansible.builtin.uri:
-        url: "http://localhost:8080/rest/api/2/issue/"
+        url: "{{ jira_url }}/rest/api/2/issue/"
         user: "{{ jira_username }}"
         password: "{{ jira_password }}"
         method: "POST"
