@@ -1,12 +1,12 @@
 ---
-- name: Close a jira issue via api
+- name: Transition a jira issue via api
   hosts: localhost
   connection: local
   gather_facts: false
 
   tasks:
 
-    - name: "Close a jira issue via api"
+    - name: "Transition a jira issue via api"
       ansible.builtin.uri:
         url: "{{ jira_url }}/rest/api/2/issue/{{ jira_issue }}/transitions"
         user: "{{ jira_username }}"
@@ -14,12 +14,12 @@
         method: "POST"
         body:
           transition:
-            id: 21
+            id: "{{ jira_transition }}"
         force_basic_auth: true
         status_code: 204
         body_format: "json"
       register: results
 
-    - name: "Output jira close results"
+    - name: "Output jira transition results"
       ansible.builtin.debug:
         var: results.status
