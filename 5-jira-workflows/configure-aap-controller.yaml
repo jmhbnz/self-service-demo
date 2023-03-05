@@ -94,7 +94,7 @@
         description: ""
         project: "Self-service"
         inventory: "Localhost"
-        playbook: "5-jira-workflows/comment-jira-issue-api.yaml"
+        playbook: "5-jira-workflows/close-jira-issue-api.yaml"
         credential: "Jira"
         survey_enabled: false
         ask_variables_on_launch: false
