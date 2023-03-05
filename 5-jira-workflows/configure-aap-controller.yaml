@@ -37,13 +37,13 @@
 
     - name: "Create jira api credential"
       awx.awx.credential:
-        name: "Jira"
+        name: "Jira onboarding"
         organization: "Default"
         state: "present"
         credential_type: "Jira"
         inputs:
-          username: "{{ lookup('env', 'TF_VAR_jira_username') }}"
-          password: "{{ lookup('env', 'TF_VAR_jira_password') }}"
+          username: "{{ lookup('env', 'TF_VAR_jira_onboarding_username') }}"
+          password: "{{ lookup('env', 'TF_VAR_jira_onboarding_password') }}"
           url: "{{ lookup('env', 'TF_VAR_jira_url') }}"
         controller_config_file: "controller.cfg"
 
@@ -81,9 +81,23 @@
         project: "Self-service"
         inventory: "Localhost"
         playbook: "5-jira-workflows/comment-jira-issue-api.yaml"
-        credential: "Jira"
         survey_enabled: false
-        ask_variables_on_launch: false
+        ask_credential_on_launch: true
+        ask_variables_on_launch: true
+        controller_config_file: "controller.cfg"
+
+    - name: "Add job template for jira assign"
+      awx.awx.job_template:
+        name: "Jira assign"
+        organization: "Default"
+        state: "present"
+        description: ""
+        project: "Self-service"
+        inventory: "Localhost"
+        playbook: "5-jira-workflows/assign-jira-issue-api.yaml"
+        survey_enabled: false
+        ask_credential_on_launch: true
+        ask_variables_on_launch: true
         controller_config_file: "controller.cfg"
 
     - name: "Add job template for jira close"
@@ -95,7 +109,36 @@
         project: "Self-service"
         inventory: "Localhost"
         playbook: "5-jira-workflows/close-jira-issue-api.yaml"
-        credential: "Jira"
         survey_enabled: false
+        ask_credential_on_launch: true
         ask_variables_on_launch: false
+        controller_config_file: "controller.cfg"
+
+    - name: "Create a workflow job template for onboarding"
+      awx.awx.workflow_job_template:
+        controller_config_file: "controller.cfg"
+        name: "Onboarding"
+        inventory: "Localhost"
+        destroy_current_schema: true
+        ask_variables_on_launch: true
+        ask_credential_on_launch: true
+
+    - name: "Create workflow node for onboarding assign"
+      awx.awx.workflow_job_template_node:
+        identifier: "Assign"
+        unified_job_template: "Jira assign"
+        workflow_job_template: "Onboarding"
+        credentials:
+          - "Jira onboarding"
+        controller_config_file: "controller.cfg"
+
+    - name: "Create workflow node for onboarding comment"
+      awx.awx.workflow_job_template_node:
+        identifier: "Assigned comment"
+        unified_job_template: "Jira comment"
+        workflow_job_template: "Onboarding"
+        credentials:
+          - "Jira onboarding"
+        extra_data:
+          jira_comment: "This issue has been picked up by onboarding bot :)"
         controller_config_file: "controller.cfg"
