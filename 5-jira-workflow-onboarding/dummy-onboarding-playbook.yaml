@@ -1,0 +1,11 @@
+---
+- name: Dummy playbook representing an onboarding step
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: "Dummy onboarding"
+      ansible.builtin.debug:
+        msg: "Completed sucessfully"
