@@ -11,7 +11,7 @@
         that:
           - jira_issue is defined
           - instance_type is defined
-          - instance_region is defined
+          - region is defined
 
     - name: "Check if a manual approval will be required"
       fail:
