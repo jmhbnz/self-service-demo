@@ -67,7 +67,19 @@
         project: "Self-service"
         inventory: "Localhost"
         playbook: "5-jira-workflow-onboarding/dummy-onboarding-playbook.yaml"
-        credential: "Amazon Web Services"
+        survey_enabled: false
+        ask_variables_on_launch: true
+        controller_config_file: "controller.cfg"
+
+    - name: "Add job template for request validation"
+      awx.awx.job_template:
+        name: "Validate onboarding request"
+        organization: "Default"
+        state: "present"
+        description: "Job template to validate an onboarding request."
+        project: "Self-service"
+        inventory: "Localhost"
+        playbook: "5-jira-workflow-onboarding/validate-onboarding-request.yaml"
         survey_enabled: false
         ask_variables_on_launch: false
         controller_config_file: "controller.cfg"
@@ -141,7 +153,7 @@
         credentials:
           - "Jira onboarding"
         extra_data:
-          jira_comment: "Onboarding workflow completed! ✅"
+          jira_comment: "Onboarding workflow completed! New team member '{{ new_user_id }}' has been setup with '{{ new_user_role }}' role ✅"
         controller_config_file: "controller.cfg"
         all_parents_must_converge: true
         success_nodes: "Done transition"
@@ -198,7 +210,7 @@
         credentials:
           - "Jira onboarding"
         extra_data:
-          jira_comment: "This issue has been picked up by onboarding bot :)  You can track my progress here: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/jobs?job.name__icontains=onboarding"
+          jira_comment: "This issue has been picked up by onboarding bot :)  You can track my progress here: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/jobs?job.name__icontains=onboarding&job.or__type=workflow_job"
         controller_config_file: "controller.cfg"
         success_nodes:
           - "Create openshift namespace"
@@ -227,3 +239,32 @@
         credentials:
           - "Jira onboarding"
         controller_config_file: "controller.cfg"
+        success_nodes:
+          - "Assigned comment"
+
+    - name: "Approval node based on role"
+      awx.awx.workflow_job_template_node:
+      identifier: "Approval"
+      workflow_job_template: "Onboarding"
+      approval_node:
+        description: "Should user {{ new_user_id }} be setup with role {{ new_user_role }}?"
+        name: "Approval"
+        timeout: 3600
+     success_nodes:
+       - "Assign"
+       - "In progress transition"
+
+    - name: "Create workflow node for request validation"
+      awx.awx.workflow_job_template_node:
+        identifier: "Assign"
+        unified_job_template: "Jira assign"
+        workflow_job_template: "Onboarding"
+        credentials:
+          - "Jira onboarding"
+        controller_config_file: "controller.cfg"
+        success_nodes:
+          - "Assign"
+          - "In progress transition"
+        failure_nodes:
+          - "Approval"
+
