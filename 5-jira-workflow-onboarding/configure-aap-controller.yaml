@@ -133,6 +133,7 @@
         inventory: "Localhost"
         destroy_current_schema: true
         ask_variables_on_launch: true
+        allow_simultaneous: true
 
     - name: "Create workflow node for done transition"
       awx.awx.workflow_job_template_node:
@@ -153,7 +154,7 @@
         credentials:
           - "Jira onboarding"
         extra_data:
-          jira_comment: "Onboarding workflow completed! New team member '{{ new_user_id }}' has been setup with '{{ new_user_role }}' role ✅"
+          jira_comment: "Onboarding workflow completed! New team member has been setup with requested role ✅"
         controller_config_file: "controller.cfg"
         all_parents_must_converge: true
         success_nodes: "Done transition"
@@ -187,7 +188,7 @@
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
         extra_data:
-          wait_seconds: 45
+          wait_seconds: 30
         success_nodes:
           - "Completed comment"
 
@@ -198,7 +199,7 @@
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
         extra_data:
-          wait_seconds: 60
+          wait_seconds: 15
         success_nodes:
           - "Completed comment"
 
@@ -217,6 +218,17 @@
           - "Password vault access"
           - "Assign active directory groups"
           - "Docker daemon access on admin server"
+
+    - name: "Create workflow node for onboarding declined"
+      awx.awx.workflow_job_template_node:
+        identifier: "Declined comment"
+        unified_job_template: "Jira comment"
+        workflow_job_template: "Onboarding"
+        credentials:
+          - "Jira onboarding"
+        extra_data:
+          jira_comment: "Onboarding user into requested role was not approved."
+        controller_config_file: "controller.cfg"
 
     - name: "Create workflow node for in progress transition"
       awx.awx.workflow_job_template_node:
@@ -240,31 +252,35 @@
           - "Jira onboarding"
         controller_config_file: "controller.cfg"
         success_nodes:
-          - "Assigned comment"
+          - "In progress transition"
 
     - name: "Approval node based on role"
       awx.awx.workflow_job_template_node:
         identifier: "Approval"
         workflow_job_template: "Onboarding"
         approval_node:
-          description: "Should user {{ new_user_id }} be setup with role {{ new_user_role }}?"
+          description: "Should user be setup with role?"
           name: "Approval"
           timeout: 3600
-        success_nodes:
-          - "Assign"
-          - "In progress transition"
+        controller_config_file: "controller.cfg"
 
-    - name: "Create workflow node for request validation"
+    - name: "Link approval node"
       awx.awx.workflow_job_template_node:
-        identifier: "Assign"
-        unified_job_template: "Jira assign"
+        identifier: "Approval"
         workflow_job_template: "Onboarding"
-        credentials:
-          - "Jira onboarding"
         controller_config_file: "controller.cfg"
         success_nodes:
           - "Assign"
-          - "In progress transition"
+        failure_nodes:
+          - "Declined"
+
+    - name: "Create workflow node for request validation"
+      awx.awx.workflow_job_template_node:
+        identifier: "Validate"
+        unified_job_template: "Validate onboarding request"
+        workflow_job_template: "Onboarding"
+        controller_config_file: "controller.cfg"
+        success_nodes:
+         - "Assign"
         failure_nodes:
           - "Approval"
-
