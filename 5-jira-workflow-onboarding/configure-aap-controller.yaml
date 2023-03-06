@@ -122,6 +122,17 @@
         destroy_current_schema: true
         ask_variables_on_launch: true
 
+    - name: "Create workflow node for done transition"
+      awx.awx.workflow_job_template_node:
+        identifier: "Done transition"
+        unified_job_template: "Jira transition"
+        workflow_job_template: "Onboarding"
+        extra_data:
+          jira_transition: "41"
+        credentials:
+          - "Jira onboarding"
+        controller_config_file: "controller.cfg"
+
     - name: "Create workflow node for onboarding done comment"
       awx.awx.workflow_job_template_node:
         identifier: "Completed comment"
@@ -133,6 +144,7 @@
           jira_comment: "Onboarding workflow completed! ✅"
         controller_config_file: "controller.cfg"
         all_parents_must_converge: true
+        success_nodes: "Done transition"
 
     - name: "Create workflow node for onboarding dummy task 1"
       awx.awx.workflow_job_template_node:
@@ -140,6 +152,8 @@
         unified_job_template: "Onboarding dummy task"
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
+        extra_data:
+          wait_seconds: 30
         success_nodes:
           - "Completed comment"
 
@@ -149,6 +163,8 @@
         unified_job_template: "Onboarding dummy task"
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
+        extra_data:
+          wait_seconds: 15
         success_nodes:
           - "Completed comment"
 
@@ -158,6 +174,8 @@
         unified_job_template: "Onboarding dummy task"
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
+        extra_data:
+          wait_seconds: 45
         success_nodes:
           - "Completed comment"
 
@@ -167,24 +185,10 @@
         unified_job_template: "Onboarding dummy task"
         workflow_job_template: "Onboarding"
         controller_config_file: "controller.cfg"
+        extra_data:
+          wait_seconds: 60
         success_nodes:
           - "Completed comment"
-
-    - name: "Create workflow node for done transition"
-      awx.awx.workflow_job_template_node:
-        identifier: "Done transition"
-        unified_job_template: "Jira transition"
-        workflow_job_template: "Onboarding"
-        extra_data:
-          jira_transition: "41"
-        credentials:
-          - "Jira onboarding"
-        controller_config_file: "controller.cfg"
-        success_nodes:
-          - "Create openshift namespace"
-          - "Password vault access"
-          - "Assign active directory groups"
-          - "Docker daemon access on admin server"
 
     - name: "Create workflow node for onboarding comment"
       awx.awx.workflow_job_template_node:
@@ -197,7 +201,10 @@
           jira_comment: "This issue has been picked up by onboarding bot :)  You can track my progress here: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/jobs?job.name__icontains=onboarding"
         controller_config_file: "controller.cfg"
         success_nodes:
-          - "Done transition"
+          - "Create openshift namespace"
+          - "Password vault access"
+          - "Assign active directory groups"
+          - "Docker daemon access on admin server"
 
     - name: "Create workflow node for in progress transition"
       awx.awx.workflow_job_template_node:

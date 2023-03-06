@@ -6,6 +6,10 @@
 
   tasks:
 
+    - name: "Wait for a provided amount of time"
+      ansible.builtin.pause:
+        seconds: "{{ wait_seconds }}"
+
     - name: "Dummy onboarding"
       ansible.builtin.debug:
         msg: "Completed sucessfully"
