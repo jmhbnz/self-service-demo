@@ -244,15 +244,15 @@
 
     - name: "Approval node based on role"
       awx.awx.workflow_job_template_node:
-      identifier: "Approval"
-      workflow_job_template: "Onboarding"
-      approval_node:
-        description: "Should user {{ new_user_id }} be setup with role {{ new_user_role }}?"
-        name: "Approval"
-        timeout: 3600
-     success_nodes:
-       - "Assign"
-       - "In progress transition"
+        identifier: "Approval"
+        workflow_job_template: "Onboarding"
+        approval_node:
+          description: "Should user {{ new_user_id }} be setup with role {{ new_user_role }}?"
+          name: "Approval"
+          timeout: 3600
+        success_nodes:
+          - "Assign"
+          - "In progress transition"
 
     - name: "Create workflow node for request validation"
       awx.awx.workflow_job_template_node:
