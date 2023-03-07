@@ -63,7 +63,7 @@
         name: "Validate provisioning request"
         organization: "Default"
         state: "present"
-        description: "Job template to validate an onboarding request."
+        description: "Job template to validate an provisioning request."
         project: "Self-service"
         inventory: "Localhost"
         playbook: "6-jira-workflow-vm-provisioning/validate-provisioning-request.yaml"
@@ -133,7 +133,7 @@
           - "Jira provisioning"
         controller_config_file: "controller.cfg"
 
-    - name: "Create workflow node for onboarding done comment"
+    - name: "Create workflow node for provisioning done comment"
       awx.awx.workflow_job_template_node:
         identifier: "Completed comment"
         unified_job_template: "Jira comment"
