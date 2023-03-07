@@ -47,6 +47,47 @@
           url: "{{ lookup('env', 'TF_VAR_jira_url') }}"
         controller_config_file: "controller.cfg"
 
+    - name: "Create aap api credential type"
+      awx.awx.credential_type:
+        name: "Aap"
+        description: "Credentials type for aap"
+        kind: "cloud"
+        inputs:
+          fields:
+            - id: "username"
+              type: "string"
+              label: "username"
+              multiline: false
+            - id: "password"
+              type: "string"
+              label: "password"
+              secret: true
+              multiline: false
+            - id: "url"
+              type: "string"
+              label: "url"
+              secret: false
+              multiline: false
+        injectors:
+          extra_vars:
+            aap_username: "{% raw -%}{{ username }}{% endraw -%}"
+            aap_password: "{% raw -%}{{ password }}{% endraw -%}"
+            aap_url: "{% raw -%}{{ url }}{% endraw -%}"
+        state: present
+        controller_config_file: "controller.cfg"
+
+    - name: "Create aap api credential"
+      awx.awx.credential:
+        name: "Aap onboarding"
+        organization: "Default"
+        state: "present"
+        credential_type: "Jira"
+        inputs:
+          username: "{{ lookup('env', 'TF_VAR_aap_username') }}"
+          password: "{{ lookup('env', 'TF_VAR_aap_password') }}"
+          url: "{{ lookup('env', 'TF_VAR_aap_url') }}"
+        controller_config_file: "controller.cfg"
+
     - name: "Add project for jira self-service"
       awx.awx.project:
         name: "Self-service"
@@ -274,6 +315,18 @@
         failure_nodes:
           - "Declined comment"
 
+    - name: "Create workflow node for approval required comment"
+      awx.awx.workflow_job_template_node:
+        identifier: "Approval comment"
+        unified_job_template: "Jira comment"
+        workflow_job_template: "Onboarding"
+        credentials:
+          - "Jira onboarding"
+        extra_data:
+          jira_comment: "Approval required for this request: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/workflow_approvals?workflow_approvals.status__startswith=pending"
+        controller_config_file: "controller.cfg"
+        success_nodes: "Approval"
+
     - name: "Create workflow node for request validation"
       awx.awx.workflow_job_template_node:
         identifier: "Validate"
@@ -283,4 +336,19 @@
         success_nodes:
          - "Assign"
         failure_nodes:
-          - "Approval"
+          - "Approval comment"
+
+    - name: "Add job template for approving a workflow"
+      awx.awx.job_template:
+        name: "Approve workflow"
+        organization: "Default"
+        state: "present"
+        description: "Job template to approve a pending workflow."
+        project: "Self-service"
+        inventory: "Localhost"
+        credentials:
+          - "Aap onboarding"
+        playbook: "5-jira-workflow-onboarding/approve-aap-workflow.yaml"
+        survey_enabled: false
+        ask_variables_on_launch: false
+        controller_config_file: "controller.cfg"

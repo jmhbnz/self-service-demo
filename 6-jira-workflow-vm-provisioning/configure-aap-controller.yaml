@@ -223,6 +223,18 @@
         failure_nodes:
           - "Declined comment"
 
+    - name: "Create workflow node for approval required comment"
+      awx.awx.workflow_job_template_node:
+        identifier: "Approval comment"
+        unified_job_template: "Jira comment"
+        workflow_job_template: "Vm provisioning"
+        credentials:
+          - "Jira provisioning"
+        extra_data:
+          jira_comment: "Approval required for this request: https://aap.apps.rosa-xjm4v.nx1c.p1.openshiftapps.com/#/workflow_approvals?workflow_approvals.status__startswith=pending"
+        controller_config_file: "controller.cfg"
+        success_nodes: "Approval"
+
     - name: "Create workflow node for request validation"
       awx.awx.workflow_job_template_node:
         identifier: "Validate"
@@ -232,4 +244,4 @@
         success_nodes:
          - "Assign"
         failure_nodes:
-          - "Approval"
+          - "Approval comment"
