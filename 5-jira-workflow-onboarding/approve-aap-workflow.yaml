@@ -8,7 +8,7 @@
 
     - name: "Identify id of pending approval"
       ansible.builtin.uri:
-        url: "{{ aap_url }}"
+        url: "{{ aap_url }}/api/v2/workflow_approvals?status__startswith=pending"
         user: "{{ aap_username }}"
         password: "{{ aap_password }}"
         method: "GET"

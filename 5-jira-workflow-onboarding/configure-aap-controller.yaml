@@ -81,7 +81,7 @@
         name: "Aap onboarding"
         organization: "Default"
         state: "present"
-        credential_type: "Jira"
+        credential_type: "Aap"
         inputs:
           username: "{{ lookup('env', 'TF_VAR_aap_username') }}"
           password: "{{ lookup('env', 'TF_VAR_aap_password') }}"
