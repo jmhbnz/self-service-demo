@@ -47,6 +47,7 @@
         extra_vars:
           rhel8cis_run_audit: true
         controller_config_file: "controller.cfg"
+        allow_simultaneous: true
 
     - name: "Add job template for jira create"
       awx.awx.job_template:
@@ -90,9 +91,9 @@
         controller_config_file: "controller.cfg"
         failure_nodes: "Create jira"
 
-    - name: "Create schedule for audit job template to run every 15 minutes"
+    - name: "Create schedule for audit job template to run every 30 minutes"
       schedule:
         name: "Audit compliance benchmark"
-        rrule: "DTSTART:20230124T202445Z RRULE:FREQ=MINUTELY;INTERVAL=15"
+        rrule: "DTSTART:20230124T202445Z RRULE:FREQ=MINUTELY;INTERVAL=30"
         unified_job_template: "Audit compliance benchmark"
         controller_config_file: "controller.cfg"
