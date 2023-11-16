@@ -7,7 +7,7 @@ vpc_cidr           = "10.11.0.0/16"
 public_subnet_cidr = "10.11.1.0/24"
 
 # AWS Settings
-aws_region = "ap-southeast-2"
+aws_region = "ap-southeast-1"
 
 # Linux Virtual Machine
 linux_instance_type               = "t2.large"

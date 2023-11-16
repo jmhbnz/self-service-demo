@@ -9,10 +9,8 @@ To run the demo we need four rhel virtual machines, these machines will run our 
 To get started we need to define some credentials into an ~.env~ file. Note that these credentials are ignored in the repo ~.gitignore~ file for security reasons.
 
 #+NAME: Create secret env file
-#+begin_src tmate
+#+begin_src tmux
 cat << EOF > .env
-export TF_VAR_gitlab_token=placeholder
-
 export TF_VAR_subscription_pw=placeholder
 
 export TF_VAR_aws_region=ap-southeast-2
@@ -34,7 +32,7 @@ EOF
 Once secrets have been defined run the code block below to install our dependencies and run the ansible playbook that will deploy our infrastructure.
 
 #+NAME: Install dependencies and run
-#+begin_src tmate
+#+begin_src tmux
 # Source secrets
 source ../.env
 
@@ -51,7 +49,7 @@ ansible-playbook -i localhost demo-infra-deploy.yaml
 The code block above will create and configure our new virtual machines. If required the configure playbook can also be run manually post creation using the code block below. I've noticed that sometimes first run the external IP addresses for the ec2 instances updates post terraform apply so a second run will correct that in cloudflare.
 
 #+NAME: Run the configure playbook
-#+begin_src tmate
+#+begin_src tmux
 # Run the configure playbook
 ansible-playbook -i controller.rhdemo.win,hub.rhdemo.win,sso.rhdemo.win,catalog.rhdemo.win -u root demo-infra-configure.yaml --key-file rhel-demo-dev-linux-ap-southeast-2.pem
 #+end_src
@@ -60,6 +58,6 @@ ansible-playbook -i controller.rhdemo.win,hub.rhdemo.win,sso.rhdemo.win,catalog.
 Once deployed and configured you can test the connection by running the following:
 
 #+NAME: Connect to controller instance
-#+begin_src tmate
+#+begin_src tmux
 ssh -i rhel-demo-dev-linux-ap-southeast-2.pem ec2-user@controller.rhdemo.win
 #+end_src

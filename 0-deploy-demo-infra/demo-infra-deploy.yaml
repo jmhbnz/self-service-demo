@@ -12,7 +12,6 @@
           - "'TF_VAR_aws_secret_key' in ansible_env"
           - "'TF_VAR_aws_access_key' in ansible_env"
           - "'TF_VAR_subscription_pw' in ansible_env"
-          - "'TF_VAR_gitlab_token' in ansible_env"
           - "'TF_VAR_cloudflare_token' in ansible_env"
         fail_msg: "Required input variables are not set, refer README.org."
 

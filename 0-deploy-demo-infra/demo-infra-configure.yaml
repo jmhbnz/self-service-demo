@@ -35,8 +35,6 @@
       get_url:
         url: https://gitlab.com/jmhbnz/self-service-demo/-/package_files/61982964/download
         dest: /home/ec2-user/aap-setup.tar.gz
-        headers:
-          DEPLOY-TOKEN: "{{ lookup('env', 'TF_VAR_gitlab_token') }}"
 
     - name: Untar the aap installer
       unarchive:
